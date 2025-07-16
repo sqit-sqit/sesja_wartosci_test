@@ -65,7 +65,7 @@ def get_openai_client():
 
 # Main
 
-st.title(":classical_building: NaszGPT")
+st.title(":classical_building: Jakie są Twoje wartości")
 
 # OpenAI API key protection
 if not st.session_state.get("openai_api_key"):
