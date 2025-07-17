@@ -167,7 +167,55 @@ if prompt:                                         # jesli "prompt niepusty"
 
 
 # Sidebar
+
 with st.sidebar:
+    st.header("🎯 Twoje wartości")
+
+    if "user_values" not in st.session_state:
+        st.session_state["user_values"] = []
+
+    # Edytowalne pola dla wartości
+    for i in range(5):
+        current = st.session_state["user_values"][i] if i < len(st.session_state["user_values"]) else ""
+        new_val = st.text_input(f"Wartość #{i+1}", value=current, key=f"user_value_{i}")
+        if i < len(st.session_state["user_values"]):
+            st.session_state["user_values"][i] = new_val
+        else:
+            st.session_state["user_values"].append(new_val)
+
+    st.markdown("---")
+
+    # Liczenie kosztów
+    total_cost = 0
+    for message in st.session_state.get("messages") or []:
+        if "usage" in message:
+            total_cost += message["usage"]["prompt_tokens"] * PRICING["input_tokens"]
+            total_cost += message["usage"]["completion_tokens"] * PRICING["output_tokens"]
+
+    c0, c1 = st.columns(2)
+    with c0:
+        st.metric("Koszt rozmowy (USD)", f"${total_cost:.4f}")
+
+    with c1:
+        st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
+
+    # Edytowalna osobowość chatbota
+    default_personality = f"""
+Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
+Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.
+Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym, co ważne.
+""".strip()
+
+    st.session_state["chatbot_personality"] = st.text_area(
+        "🧠 Osobowość chatbota",
+        max_chars=1000,
+        height=200,
+        value=default_personality
+    )
+
+
+
+
     total_cost = 0
     for message in st.session_state.get("messages") or []:
         if "usage" in message:
