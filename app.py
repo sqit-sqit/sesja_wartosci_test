@@ -26,7 +26,7 @@ def get_openai_client():
 
 
 
-def chatbot_reply(user_prompt, memory):
+def chatbot_reply_old(user_prompt, memory):
     # dodaj system message
     messages = [
         {
@@ -56,6 +56,48 @@ def chatbot_reply(user_prompt, memory):
     return {
         "role": "assistant",
         "content": response.choices[0].message.content,   # instrukcja ktorej trzeba uzyc by faktycznie wyciagnac te wiadomosc
+        "usage": usage,
+    }
+
+
+def chatbot_reply(user_prompt, memory):
+    # Dołącz wartości użytkownika do system promptu
+    user_values = st.session_state.get("user_values", [])
+    values_text = ", ".join(user_values) if user_values else "nieokreślone wartości"
+    system_prompt = (
+        st.session_state["chatbot_personality"].strip()
+        + f"\n\nWartości użytkownika to: {values_text}. "
+        + "Zawsze odpowiadaj w sposób wspierający, uwzględniający te wartości."
+    )
+
+    messages = [
+        {
+            "role": "system",
+            "content": system_prompt,
+        },
+    ]
+    
+    for message in memory:
+        messages.append({"role": message["role"], "content": message["content"]})
+
+    messages.append({"role": "user", "content": user_prompt})
+
+    client = get_openai_client()
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=messages
+    )
+    usage = {}
+    if response.usage:
+        usage = {
+            "completion_tokens": response.usage.completion_tokens,
+            "prompt_tokens": response.usage.prompt_tokens,
+            "total_tokens": response.usage.total_tokens,
+        }
+
+    return {
+        "role": "assistant",
+        "content": response.choices[0].message.content,
         "usage": usage,
     }
 
