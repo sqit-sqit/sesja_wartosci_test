@@ -24,6 +24,8 @@ env = dotenv_values(".env")
 def get_openai_client():
     return OpenAI(api_key=st.session_state["openai_api_key"])
 
+
+
 def chatbot_reply(user_prompt, memory):
     # dodaj system message
     messages = [
@@ -39,7 +41,7 @@ def chatbot_reply(user_prompt, memory):
     # dodaj wiadomość użytkownika
     messages.append({"role": "user", "content": user_prompt})
 
-    response = openai_client.chat.completions.create(
+    response = openai_client.chat.completions.create(   # laczymy sie z open ai, z jego modelami zwiazanymi z czatem, dokladnie to z modelami ktore potrafia odpowiadac
         model=MODEL,
         messages=messages
     )
@@ -53,7 +55,7 @@ def chatbot_reply(user_prompt, memory):
 
     return {
         "role": "assistant",
-        "content": response.choices[0].message.content,
+        "content": response.choices[0].message.content,   # instrukcja ktorej trzeba uzyc by faktycznie wyciagnac te wiadomosc
         "usage": usage,
     }
 
@@ -83,26 +85,46 @@ if not st.session_state.get("openai_api_key"):
 
 openai_client = get_openai_client()
 
-if "messages" not in st.session_state:
+
+# --- Nowa sekcja: wartości użytkownika ---
+if "user_values" not in st.session_state:
+    st.session_state["user_values"] = []
+
+if len(st.session_state["user_values"]) < 5:
+    st.subheader("🎯 Jakie są Twoje 5 najważniejszych wartości?")
+    value_input = st.text_input(f"Podaj wartość #{len(st.session_state['user_values']) + 1}")
+    if value_input and value_input.strip():
+        st.session_state["user_values"].append(value_input.strip())
+        st.rerun()
+    st.stop()
+else:
+    st.success("✅ Dziękuję! Twoje wartości zostały zapisane.")
+    st.write("Twoje wartości:", ", ".join(st.session_state["user_values"]))
+
+if "messages" not in st.session_state:   # sprawdzamy, czy lancuch messages nie jest w session state i jesli nie jest, to go dodajemy
     st.session_state["messages"] = []
 
-for message in st.session_state["messages"]:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+for message in st.session_state["messages"]:    # wyswietla wszystkie messages dodane do session state wczesniej. Przeiteruj mi po wszystkich wiadomosciach ktore mamy w session state
+    with st.chat_message(message["role"]):      # dodaj mi komponent chat_message 
+        st.markdown(message["content"])         # tresc tej wiadomosci to ma byc cntent tego message
 
-prompt = st.chat_input("O co chcesz spytać?")
-if prompt:
-    with st.chat_message("user"):
+
+
+prompt = st.chat_input("O co chcesz spytać?")  # miejsce gdzie uzytkownicy moga wpisac pytanie
+if prompt:                                         # jesli "prompt niepusty"
+    with st.chat_message("user"):                   # to wyswietl go w okienku u gory, chat_message to komponent, "user" oznacza awatara
         st.markdown(prompt)
 
-    st.session_state["messages"].append({"role": "user", "content": prompt})
+    st.session_state["messages"].append({"role": "user", "content": prompt})  # zbieramy te wiadomosci, tworzymy slownik, role - okresla kto stworzyl te wiadomosc
 
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant"):          # wyswietlanie okienka z wiadomoscia
         response = chatbot_reply(prompt, memory=st.session_state["messages"][-10:])
         st.markdown(response["content"])
 
-    st.session_state["messages"].append({"role": "assistant", "content": response["content"], "usage": response["usage"]})
+    st.session_state["messages"].append({"role": "assistant", "content": response["content"], "usage": response["usage"]})  # tu dodajemy do session state response z chata
 
+
+# Sidebar
 with st.sidebar:
     total_cost = 0
     for message in st.session_state.get("messages") or []:
