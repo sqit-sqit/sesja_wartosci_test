@@ -1,6 +1,7 @@
 import streamlit as st
 from openai import OpenAI
 from dotenv import dotenv_values
+from wartosci import zapytaj_wartosci
 
 # wersja - pozwala wprowadzić wartości, chat ma ich świadomośc
 
@@ -69,19 +70,8 @@ def chatbot_reply(user_prompt, memory):
 
 
 # --- Nowa sekcja: wartości użytkownika ---
-if "user_values" not in st.session_state:
-    st.session_state["user_values"] = []
 
-if len(st.session_state["user_values"]) < 5:
-    st.subheader("🎯 Jakie są Twoje 5 najważniejszych wartości?")
-    value_input = st.text_input(f"Podaj wartość #{len(st.session_state['user_values']) + 1}")
-    if value_input and value_input.strip():
-        st.session_state["user_values"].append(value_input.strip())
-        st.rerun()
-    st.stop()
-else:
-    st.success("✅ Dziękuję! Twoje wartości zostały zapisane.")
-    st.write("Twoje wartości:", ", ".join(st.session_state["user_values"]))
+
 
 
 st.title(":classical_building: NaszGPT")
@@ -103,7 +93,7 @@ if not st.session_state.get("openai_api_key"):
 
 openai_client = get_openai_client()
 
-
+zapytaj_wartosci()
 
 
 if "messages" not in st.session_state:
