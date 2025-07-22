@@ -127,6 +127,7 @@ if prompt:
     st.session_state["messages"].append({"role": "assistant", "content": response["content"], "usage": response["usage"]})
 
 
+
 with st.sidebar:
     st.header("🎯 Twoje wartości")
 
@@ -134,12 +135,21 @@ with st.sidebar:
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
 
-    # Układ wartości w dwóch kolumnach
+    # Układ wartości w dwóch kolumnach z przyciskiem usuwania
+
     col1, col2 = st.columns(2)
     for i, val in enumerate(st.session_state["user_values"]):
         col = col1 if i % 2 == 0 else col2
         with col:
-            st.markdown(f"✅ **{val}**")
+            cols_inner = st.columns([5, 1])  # szeroki tekst | wąski przycisk
+            with cols_inner[0]:
+                st.markdown(f"<div style='padding: 4px 0px;'>✅ <b>{val}</b></div>", unsafe_allow_html=True)
+            with cols_inner[1]:
+                if st.button("×", key=f"delete_{i}", help=f"Usuń wartość: {val}"):
+                    st.session_state["user_values"].pop(i)
+                    st.rerun()
+                    break
+
 
     st.markdown("---")
 
