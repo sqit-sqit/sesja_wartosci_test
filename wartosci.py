@@ -1,15 +1,16 @@
 import streamlit as st
 
-def zapytaj_wartosci():
-    """Pobiera 5 wartości od użytkownika i zapisuje je do session_state."""
+def zapytaj_wartosci(liczba_wartosci: int):
+    """Pobiera określoną liczbę wartości od użytkownika i zapisuje je do session_state."""
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
 
-    if len(st.session_state["user_values"]) < 5:
-        st.subheader("🎯 Jakie są Twoje 5 najważniejszych wartości?")
+    if len(st.session_state["user_values"]) < liczba_wartosci:
+        index = len(st.session_state["user_values"])
+        st.subheader("🎯 Jakie są Twoje najważniejsze wartości?")
         value_input = st.text_input(
-            f"Podaj wartość #{len(st.session_state['user_values']) + 1}",
-            key="value_input"
+            f"Podaj wartość #{index + 1}",
+            key=f"value_input_{index}"
         )
 
         if value_input and value_input.strip():

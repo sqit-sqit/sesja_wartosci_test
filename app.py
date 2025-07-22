@@ -18,6 +18,11 @@ model_pricings = {
 MODEL = "gpt-4o"
 USD_TO_PLN = 3.97
 PRICING = model_pricings[MODEL]
+LICZBA_WARTOSCI = 10  # <-- możesz tu ustawić dowolną wartość
+
+
+
+
 
 env = dotenv_values(".env")
 
@@ -93,7 +98,8 @@ if not st.session_state.get("openai_api_key"):
 
 openai_client = get_openai_client()
 
-zapytaj_wartosci()
+
+zapytaj_wartosci(LICZBA_WARTOSCI)
 
 
 if "messages" not in st.session_state:
@@ -117,13 +123,17 @@ if prompt:
     st.session_state["messages"].append({"role": "assistant", "content": response["content"], "usage": response["usage"]})
 
 with st.sidebar:
+    
     st.header("🎯 Twoje wartości")
 
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
 
+
+
+
     # Edytowalne pola dla wartości
-    for i in range(5):
+    for i in range(LICZBA_WARTOSCI):
         current = st.session_state["user_values"][i] if i < len(st.session_state["user_values"]) else ""
         new_val = st.text_input(f"Wartość #{i+1}", value=current, key=f"user_value_{i}")
         if i < len(st.session_state["user_values"]):
