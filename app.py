@@ -79,7 +79,7 @@ def chatbot_reply(user_prompt, memory):
 
 
 
-st.title(":classical_building: NaszGPT")
+st.title(":classical_building: Moje Osobiste Wartości")
 
 
 # OpenAI API key protection
@@ -132,14 +132,22 @@ with st.sidebar:
 
 
 
-    # Edytowalne pola dla wartości
+        # Edytowalne pola wartości w dwóch kolumnach
+    col1, col2 = st.columns(2)
     for i in range(LICZBA_WARTOSCI):
         current = st.session_state["user_values"][i] if i < len(st.session_state["user_values"]) else ""
-        new_val = st.text_input(f"Wartość #{i+1}", value=current, key=f"user_value_{i}")
+        key = f"user_value_{i}"
+        col = col1 if i % 2 == 0 else col2  # naprzemiennie kolumny
+
+        with col:
+            new_val = st.text_input(f"Wartość #{i+1}", value=current, key=key)
+
         if i < len(st.session_state["user_values"]):
             st.session_state["user_values"][i] = new_val
         else:
             st.session_state["user_values"].append(new_val)
+
+
 
     st.markdown("---")
 
