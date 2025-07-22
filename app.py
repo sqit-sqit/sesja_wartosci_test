@@ -2,6 +2,7 @@ import streamlit as st
 from openai import OpenAI
 from dotenv import dotenv_values
 from wartosci import zapytaj_wartosci
+from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
 
 # wersja - pozwala wprowadzić wartości, chat ma ich świadomośc
 
@@ -74,13 +75,7 @@ def chatbot_reply(user_prompt, memory):
     }
 
 
-# --- Nowa sekcja: wartości użytkownika ---
-
-
-
-
 st.title(":classical_building: Moje Osobiste Wartości")
-
 
 # OpenAI API key protection
 if not st.session_state.get("openai_api_key"):
@@ -98,6 +93,9 @@ if not st.session_state.get("openai_api_key"):
 
 openai_client = get_openai_client()
 
+
+
+pokaz_losowe_wartosci_animowane()
 
 zapytaj_wartosci(LICZBA_WARTOSCI)
 
