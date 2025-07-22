@@ -77,6 +77,12 @@ def chatbot_reply(user_prompt, memory):
 
 st.title(":classical_building: Moje Osobiste Wartości")
 
+
+if st.session_state.get("rerun"):
+    st.session_state["rerun"] = False
+    st.rerun()
+
+
 # OpenAI API key protection
 if not st.session_state.get("openai_api_key"):
     if "OPENAI_API_KEY" in env:
@@ -97,7 +103,7 @@ openai_client = get_openai_client()
 
 pokaz_losowe_wartosci_animowane()
 
-zapytaj_wartosci(LICZBA_WARTOSCI)
+# zapytaj_wartosci(LICZBA_WARTOSCI)
 
 
 if "messages" not in st.session_state:
@@ -120,36 +126,24 @@ if prompt:
 
     st.session_state["messages"].append({"role": "assistant", "content": response["content"], "usage": response["usage"]})
 
+
 with st.sidebar:
-    
     st.header("🎯 Twoje wartości")
 
+    # Inicjalizacja listy
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
 
-
-
-
-        # Edytowalne pola wartości w dwóch kolumnach
+    # Układ wartości w dwóch kolumnach
     col1, col2 = st.columns(2)
-    for i in range(LICZBA_WARTOSCI):
-        current = st.session_state["user_values"][i] if i < len(st.session_state["user_values"]) else ""
-        key = f"user_value_{i}"
-        col = col1 if i % 2 == 0 else col2  # naprzemiennie kolumny
-
+    for i, val in enumerate(st.session_state["user_values"]):
+        col = col1 if i % 2 == 0 else col2
         with col:
-            new_val = st.text_input(f"Wartość #{i+1}", value=current, key=key)
-
-        if i < len(st.session_state["user_values"]):
-            st.session_state["user_values"][i] = new_val
-        else:
-            st.session_state["user_values"].append(new_val)
-
-
+            st.markdown(f"✅ **{val}**")
 
     st.markdown("---")
 
-    # Liczenie kosztów
+    # Koszty tokenów
     total_cost = 0
     for message in st.session_state.get("messages") or []:
         if "usage" in message:
@@ -159,11 +153,10 @@ with st.sidebar:
     c0, c1 = st.columns(2)
     with c0:
         st.metric("Koszt rozmowy (USD)", f"${total_cost:.4f}")
-
     with c1:
         st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
 
-    # Edytowalna osobowość chatbota
+    # Osobowość chatbota
     default_personality = f"""
 Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
 Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.
@@ -176,3 +169,4 @@ Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym
         height=200,
         value=default_personality
     )
+
