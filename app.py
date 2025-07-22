@@ -131,25 +131,40 @@ if prompt:
 with st.sidebar:
     st.header("🎯 Twoje wartości")
 
-    # Inicjalizacja listy
+    # Inicjalizacja potrzebnych pól session_state
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
+    if "ostatnio_usunieta" not in st.session_state:
+        st.session_state["ostatnio_usunieta"] = None
+    if "just_added" not in st.session_state:
+        st.session_state["just_added"] = []
 
-    # Układ wartości w dwóch kolumnach z przyciskiem usuwania
-
+    # Wyświetlanie wartości w dwóch kolumnach z przyciskiem ×
     col1, col2 = st.columns(2)
     for i, val in enumerate(st.session_state["user_values"]):
         col = col1 if i % 2 == 0 else col2
         with col:
-            cols_inner = st.columns([5, 1])  # szeroki tekst | wąski przycisk
+            cols_inner = st.columns([5, 1])
             with cols_inner[0]:
                 st.markdown(f"<div style='padding: 4px 0px;'>✅ <b>{val}</b></div>", unsafe_allow_html=True)
             with cols_inner[1]:
-                if st.button("×", key=f"delete_{i}", help=f"Usuń wartość: {val}"):
-                    st.session_state["user_values"].pop(i)
+                if st.button("×", key=f"delete_{val}_{i}", help=f"Usuń wartość: {val}"):
+                    st.session_state["ostatnio_usunieta"] = st.session_state["user_values"].pop(i)
                     st.rerun()
                     break
 
+    # Przycisk przywracania ostatnio usuniętej wartości
+    if st.session_state.get("ostatnio_usunieta"):
+        st.markdown(" ")
+        if st.button("↩️ Przywróć ostatnią wartość"):
+            przywrocona = st.session_state["ostatnio_usunieta"]
+            if przywrocona and przywrocona not in st.session_state["user_values"]:
+                st.session_state["user_values"].append(przywrocona)
+            st.session_state["ostatnio_usunieta"] = None
+            st.rerun()
+
+    # Wyczyść listę just_added po rerunie
+    st.session_state["just_added"] = []
 
     st.markdown("---")
 
@@ -179,4 +194,3 @@ Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym
         height=200,
         value=default_personality
     )
-
