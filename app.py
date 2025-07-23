@@ -8,6 +8,8 @@ from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
 from redukcja import redukuj_wartosci
 from etap_postepu import pokaz_pasek_postepu
 from coaching_dla_wartosci import coaching_dla_wartosci
+from intro import pokaz_intro
+
 # from podsumowanie import pokaz_podsumowanie
 
 model_pricings = {
@@ -77,15 +79,21 @@ openai_client = get_openai_client()
 
 # Etap
 if "etap" not in st.session_state:
-    st.session_state["etap"] = "wybor_wartosci"
+    st.session_state["etap"] = "Intro"
 
 st.title(":classical_building: Moje Osobiste Wartości")
 pokaz_pasek_postepu()
 
 # Etapy
-if st.session_state["etap"] == "wybor_wartosci":
+if st.session_state["etap"] == "Intro":
+    pokaz_intro()
+    if st.button("✅ Kontunuuj"):
+        st.session_state["etap"] = "wybor_wartosci"
+        st.rerun()
+
+elif st.session_state["etap"] == "wybor_wartosci":
     pokaz_losowe_wartosci_animowane()
-    if st.button("✅ Mam już wystarczająco wartości"):
+    if st.button("✅ Kontunuuj"):
         st.session_state["etap"] = "redukcja_do_10"
         st.rerun()
 
@@ -101,28 +109,6 @@ elif st.session_state["etap"] == "coaching":
 if st.session_state.get("rerun"):
     st.session_state["rerun"] = False
     st.rerun()
-
-if "messages" not in st.session_state:
-    st.session_state["messages"] = []
-
-# ✅ POPRAWKA: tylko wiadomości z "role" i "content"
-for message in st.session_state.get("messages", []):
-    if "role" in message and "content" in message:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-prompt = st.chat_input("O co chcesz spytać?")
-if prompt:
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    st.session_state["messages"].append({"role": "user", "content": prompt})
-
-    with st.chat_message("assistant"):
-        response = chatbot_reply(prompt, memory=st.session_state["messages"][-10:])
-        st.markdown(response["content"])
-
-    st.session_state["messages"].append({"role": "assistant", "content": response["content"], "usage": response["usage"]})
 
 # Sidebar
 with st.sidebar:

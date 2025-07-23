@@ -21,6 +21,7 @@ def redukuj_wartosci(limit, nastepny_etap, komunikat):
 
     st.markdown("---")
     if len(wartosci) <= limit:
+        st.warning(f"Ok, mozesz kontynuować i przejść do następnego etapu")
         if st.button("✅ Kontynuuj"):
             st.session_state["user_values"] = wartosci
             st.session_state["etap"] = nastepny_etap

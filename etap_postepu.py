@@ -2,6 +2,7 @@ import streamlit as st
 
 def pokaz_pasek_postepu():
     ETAPY = [
+        "Intro",
         "wybor_wartosci",
         "redukcja_do_10",
         "redukcja_do_3",
@@ -10,6 +11,7 @@ def pokaz_pasek_postepu():
     ]
 
     ETAP_OPIS = {
+        "Intro": "Intro",
         "wybor_wartosci": "Wybór wartości",
         "redukcja_do_10": "Redukcja do 10",
         "redukcja_do_3": "Redukcja do 3",
@@ -17,7 +19,7 @@ def pokaz_pasek_postepu():
         "podsumowanie": "Podsumowanie"
     }
 
-    aktualny = st.session_state.get("etap", "wybor_wartosci")
+    aktualny = st.session_state.get("etap", "Intro")
     aktualny_index = ETAPY.index(aktualny)
 
     # Styl CSS

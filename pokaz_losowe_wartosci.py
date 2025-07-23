@@ -50,3 +50,14 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
         st.session_state["losowe_wartosci"] = random.sample(wszystkie, min(n, len(wszystkie)))
         st.session_state["dodano_wartosc"] = False
         st.rerun()
+
+    st.markdown("---")
+    st.markdown("### ✍️ Dodaj własną wartość")
+    nowa_wartosc = st.text_input("wpisz tu swoją wartość")
+    if nowa_wartosc:
+        if "ostatnia_dodana" not in st.session_state or st.session_state["ostatnia_dodana"] != nowa_wartosc:
+            nowa_wartosc = nowa_wartosc.strip()
+            if nowa_wartosc and nowa_wartosc not in st.session_state["user_values"]:
+                st.session_state["user_values"].append(nowa_wartosc)
+                st.session_state["ostatnia_dodana"] = nowa_wartosc
+                st.rerun()
