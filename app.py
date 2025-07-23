@@ -6,8 +6,8 @@ from dotenv import dotenv_values
 
 from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
 from redukcja import redukuj_wartosci
-# from wybierz_top_wartosci import wybierz_top_wartosci
-# from wybierz_trzy_wartosci import wybierz_trzy_wartosci
+from etap_postepu import pokaz_pasek_postepu
+
 # from coaching_dla_wartosci import coaching_dla_wartosci
 # from podsumowanie import pokaz_podsumowanie
 
@@ -101,12 +101,11 @@ if "etap" not in st.session_state:
     st.session_state["etap"] = "wybor_wartosci"
 
 st.title(":classical_building: Moje Osobiste Wartości")
-
+pokaz_pasek_postepu()
 
 # Główna logika krok po kroku
 if st.session_state["etap"] == "wybor_wartosci":
     pokaz_losowe_wartosci_animowane()
-    print("pierwszy")
     if st.button("✅ Mam już wystarczająco wartości"):
         st.session_state["etap"] = "redukcja_do_10"
         st.rerun()
