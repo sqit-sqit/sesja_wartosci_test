@@ -1,10 +1,16 @@
 import streamlit as st
 from openai import OpenAI
 from dotenv import dotenv_values
-from wartosci import zapytaj_wartosci
-from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
 
-# wersja - pozwala wprowadzić wartości, chat ma ich świadomośc
+# import modułów
+
+from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
+from redukcja import redukuj_wartosci
+# from wybierz_top_wartosci import wybierz_top_wartosci
+# from wybierz_trzy_wartosci import wybierz_trzy_wartosci
+# from coaching_dla_wartosci import coaching_dla_wartosci
+# from podsumowanie import pokaz_podsumowanie
+
 
 model_pricings = {
     "gpt-4o": {
@@ -20,9 +26,6 @@ MODEL = "gpt-4o"
 USD_TO_PLN = 3.97
 PRICING = model_pricings[MODEL]
 LICZBA_WARTOSCI = 10  # <-- możesz tu ustawić dowolną wartość
-
-
-
 
 
 env = dotenv_values(".env")
@@ -75,13 +78,6 @@ def chatbot_reply(user_prompt, memory):
     }
 
 
-st.title(":classical_building: Moje Osobiste Wartości")
-
-
-if st.session_state.get("rerun"):
-    st.session_state["rerun"] = False
-    st.rerun()
-
 
 # OpenAI API key protection
 if not st.session_state.get("openai_api_key"):
@@ -100,10 +96,42 @@ if not st.session_state.get("openai_api_key"):
 openai_client = get_openai_client()
 
 
+# Ustawienie domyślnego etapu
+if "etap" not in st.session_state:
+    st.session_state["etap"] = "wybor_wartosci"
 
-pokaz_losowe_wartosci_animowane()
+st.title(":classical_building: Moje Osobiste Wartości")
 
-# zapytaj_wartosci(LICZBA_WARTOSCI)
+
+# Główna logika krok po kroku
+if st.session_state["etap"] == "wybor_wartosci":
+    pokaz_losowe_wartosci_animowane()
+    print("pierwszy")
+    if st.button("✅ Mam już wystarczająco wartości"):
+        st.session_state["etap"] = "redukcja_do_10"
+        st.rerun()
+
+elif st.session_state["etap"] == "redukcja_do_10":
+    # pokaz_losowe_wartosci_animowane()
+    # print("drugi")
+    # if st.button("✅ To jest tych 10 wartości"):
+    #     st.session_state["etap"] = "top_3"
+    #     st.rerun()
+    redukuj_wartosci(limit=10, nastepny_etap="redukcja_do_3", komunikat="Usuń wartości, aż zostanie ich tylko 10.")
+
+elif st.session_state["etap"] == "redukcja_do_3":
+    # pokaz_losowe_wartosci_animowane()
+    # if st.button("✅ To są moje 3 najwaniejsze wartości"):
+    #     st.session_state["etap"] = "redukcja_do_10"
+    #     st.rerun()
+    redukuj_wartosci(limit=3, nastepny_etap="coaching", komunikat="Usuń wartości, aż zostaną tylko 3.")
+
+
+
+
+if st.session_state.get("rerun"):
+    st.session_state["rerun"] = False
+    st.rerun()
 
 
 if "messages" not in st.session_state:
@@ -128,43 +156,43 @@ if prompt:
 
 
 
+
 with st.sidebar:
     st.header("🎯 Twoje wartości")
 
-    # Inicjalizacja potrzebnych pól session_state
+    # Inicjalizacja listy
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
-    if "ostatnio_usunieta" not in st.session_state:
-        st.session_state["ostatnio_usunieta"] = None
-    if "just_added" not in st.session_state:
-        st.session_state["just_added"] = []
 
-    # Wyświetlanie wartości w dwóch kolumnach z przyciskiem ×
+    liczba_wartosci = len(st.session_state["user_values"])
+
+    # 🔢 Licznik wybranych wartości
+    st.markdown(
+        f"<div style='font-size: 1.1rem; margin-bottom: 1rem;'>🔢 Wybranych wartości: <b>{liczba_wartosci}</b></div>",
+        unsafe_allow_html=True
+    )
+
+    # Układ wartości w dwóch kolumnach z przyciskiem usuwania
     col1, col2 = st.columns(2)
     for i, val in enumerate(st.session_state["user_values"]):
         col = col1 if i % 2 == 0 else col2
         with col:
-            cols_inner = st.columns([5, 1])
-            with cols_inner[0]:
+            inner_cols = st.columns([5, 1])
+            with inner_cols[0]:
                 st.markdown(f"<div style='padding: 4px 0px;'>✅ <b>{val}</b></div>", unsafe_allow_html=True)
-            with cols_inner[1]:
-                if st.button("×", key=f"delete_{val}_{i}", help=f"Usuń wartość: {val}"):
-                    st.session_state["ostatnio_usunieta"] = st.session_state["user_values"].pop(i)
+            with inner_cols[1]:
+                if st.button("×", key=f"delete_{val}", help=f"Usuń wartość: {val}"):
+                    st.session_state["last_deleted"] = val
+                    st.session_state["user_values"].remove(val)
                     st.rerun()
-                    break
 
-    # Przycisk przywracania ostatnio usuniętej wartości
-    if st.session_state.get("ostatnio_usunieta"):
-        st.markdown(" ")
-        if st.button("↩️ Przywróć ostatnią wartość"):
-            przywrocona = st.session_state["ostatnio_usunieta"]
-            if przywrocona and przywrocona not in st.session_state["user_values"]:
-                st.session_state["user_values"].append(przywrocona)
-            st.session_state["ostatnio_usunieta"] = None
-            st.rerun()
-
-    # Wyczyść listę just_added po rerunie
-    st.session_state["just_added"] = []
+    # 🔁 Przywrócenie ostatnio usuniętej wartości
+    if "last_deleted" in st.session_state:
+        if st.button("↩️ Przywróć ostatnio usuniętą"):
+            val = st.session_state.pop("last_deleted")
+            if val not in st.session_state["user_values"]:
+                st.session_state["user_values"].append(val)
+                st.rerun()
 
     st.markdown("---")
 
@@ -181,7 +209,7 @@ with st.sidebar:
     with c1:
         st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
 
-    # Osobowość chatbota
+    # Edytowalna osobowość chatbota
     default_personality = f"""
 Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
 Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.

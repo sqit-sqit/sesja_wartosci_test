@@ -1,0 +1,2 @@
+def pokaz_podsumowanie():
+    
