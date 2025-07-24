@@ -4,7 +4,8 @@ from datetime import datetime
 from pathlib import Path
 
 
-def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o"):
+def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o", pricing=None, usd_to_pln=4.0):
+
     st.title("📘 Podsumowanie sesji")
 
     top_3 = st.session_state.get("user_values", [])
@@ -68,6 +69,20 @@ def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o"):
     st.markdown("### ✨ Podsumowanie AI")
     st.markdown(podsumowanie)
 
+    # Oblicz całkowity koszt sesji
+    total_cost_usd = 0.0
+    messages = st.session_state.get("messages", [])
+    if pricing:
+        for m in messages:
+            if "usage" in m:
+                u = m["usage"]
+                total_cost_usd += u["prompt_tokens"] * pricing["input_tokens"]
+                total_cost_usd += u["completion_tokens"] * pricing["output_tokens"]
+
+    total_cost_pln = total_cost_usd * usd_to_pln
+
+
+
     # Zapisz do pliku tekstowego
     folder = Path("podsumowania")
     folder.mkdir(exist_ok=True)
@@ -81,5 +96,6 @@ def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o"):
         f.write(tresc_rozmowy + "\n")
         f.write("🧠 Podsumowanie AI:\n")
         f.write(podsumowanie + "\n")
+        f.write(f"💰 Koszt całkowity sesji: {total_cost_usd:.4f} USD ({total_cost_pln:.2f} PLN)\n")
 
     st.success(f"✅ Podsumowanie zapisane jako `{filename}` w folderze `podsumowania/`.")
