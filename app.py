@@ -9,8 +9,7 @@ from redukcja import redukuj_wartosci
 from etap_postepu import pokaz_pasek_postepu
 from coaching_dla_wartosci import coaching_dla_wartosci
 from intro import pokaz_intro
-
-# from podsumowanie import pokaz_podsumowanie
+from podsumowanie import pokaz_podsumowanie
 
 model_pricings = {
     "gpt-4o": {
@@ -105,6 +104,9 @@ elif st.session_state["etap"] == "redukcja_do_3":
 
 elif st.session_state["etap"] == "coaching":
     coaching_dla_wartosci(api_key=st.session_state["openai_api_key"])
+
+elif st.session_state["etap"] == "podsumowanie":
+    pokaz_podsumowanie(api_key=st.session_state["openai_api_key"])
 
 if st.session_state.get("rerun"):
     st.session_state["rerun"] = False
