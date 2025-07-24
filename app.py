@@ -106,7 +106,11 @@ elif st.session_state["etap"] == "coaching":
     coaching_dla_wartosci(api_key=st.session_state["openai_api_key"])
 
 elif st.session_state["etap"] == "podsumowanie":
-    pokaz_podsumowanie(api_key=st.session_state["openai_api_key"])
+    pokaz_podsumowanie(
+        api_key=st.session_state["openai_api_key"],
+        pricing=PRICING,
+        usd_to_pln=USD_TO_PLN
+    )
 
 if st.session_state.get("rerun"):
     st.session_state["rerun"] = False
