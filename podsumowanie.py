@@ -11,9 +11,9 @@ def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o", pricing=None, usd_to
     top_3 = st.session_state.get("user_values", [])
     coaching_chat = st.session_state.get("coaching_chat", {})
 
-    if len(top_3) != 3 or not coaching_chat:
-        st.warning("Brakuje danych do wygenerowania podsumowania. Upewnij się, że ukończyłeś etap coachingu.")
-        return
+    # if len(top_3) != 3 or not coaching_chat:
+    #     st.warning("Brakuje danych do wygenerowania podsumowania. Upewnij się, że ukończyłeś etap coachingu.")
+    #     return
 
     client = OpenAI(api_key=api_key)
 

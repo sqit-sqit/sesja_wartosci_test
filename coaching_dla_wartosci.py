@@ -22,8 +22,8 @@ def coaching_dla_wartosci(api_key: str):
     client = OpenAI(api_key=api_key)
     st.title("🧭 Porozmawiajmy o Twoich wartościach")
     wartosci = st.session_state.get("user_values", [])
-    if len(wartosci) != 3:
-        st.warning("Ten etap wymaga dokładnie 3 wybranych wartości.")
+    if len(wartosci) == 0:
+        st.warning("Ten etap wymaga przynajmniej jednej wybranej wartości.")
         return
     if "coaching_index" not in st.session_state:
         st.session_state["coaching_index"] = 0
@@ -34,7 +34,8 @@ def coaching_dla_wartosci(api_key: str):
 
     # Przejście do kolejnej wartości
     st.markdown("---")
-    if index < 2:
+    # if index < 2:
+    if index < len(wartosci)-1:
         if st.button("➡️ Przejdź do kolejnej wartości"):
             st.session_state["coaching_index"] += 1
             st.rerun()
