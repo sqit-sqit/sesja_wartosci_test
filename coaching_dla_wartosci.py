@@ -1,15 +1,26 @@
 import streamlit as st
 from openai import OpenAI
 from pathlib import Path
+
+
 def wczytaj_szablony(plik="szablony_coachingowe.txt"):
     sciezka = Path(plik)
     if not sciezka.exists():
         return []
     with open(sciezka, "r", encoding="utf-8") as f:
         return [linia.strip() for linia in f if linia.strip()]
+    
+def wczytaj_osobowosc(path="chatbot_personality_coach.txt", wartosc="", prompt_szablonowy=""):
+    if not Path(path).exists():
+        return "Jesteś empatycznym coachem."  # fallback
+
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+        return content.format(wartosc=wartosc, prompt_szablonowy=prompt_szablonowy)
+
 def coaching_dla_wartosci(api_key: str):
     client = OpenAI(api_key=api_key)
-    st.title("🧭 Coaching z AI dla Twoich wartości")
+    st.title("🧭 Porozmawiajmy o Twoich wartościach")
     wartosci = st.session_state.get("user_values", [])
     if len(wartosci) != 3:
         st.warning("Ten etap wymaga dokładnie 3 wybranych wartości.")
@@ -36,20 +47,31 @@ def coaching_dla_wartosci(api_key: str):
     # Inicjalizacja historii czatu
     if wartosc not in st.session_state["coaching_chat"]:
         szablony = wczytaj_szablony()
-        prompt_szablonowy = "\n".join(szablony[:7]) if szablony else ""
+        prompt_szablonowy = "\n".join(szablony) if szablony else ""
+
+        osobowosc = wczytaj_osobowosc(
+            path="chatbot_personality_coach.txt",
+            wartosc=wartosc,
+            prompt_szablonowy=prompt_szablonowy
+        )
+
+
+
+
         st.session_state["coaching_chat"][wartosc] = [
             {
                 "role": "system",
-                "content": (
-                    f"Jesteś empatycznym i pogłębiającym coachem. "
-                    f"Pomagasz użytkownikowi odkrywać znaczenie jego wartości: **{wartosc}**.\n"
-                    f"Stosuj pytania podobne do poniższych (ale nie dosłownie):\n{prompt_szablonowy}\n"
-                    f"Pytaj, pogłębiaj, zachęcaj do refleksji. Unikaj ocen. "
-                    f"Skup się na tym, co jest naprawdę ważne dla użytkownika."
-                    f"Zacznij od dociekania, dlaczego taka wartosść została wybrana."
-                    f"Zmierzaj do pytań, jakie kroki uytkownik chciałbym podjąć by wzmocnić lub utrzymać realizację wdanej wartości w zyciu."
-                    f"Jeśli wyczujesz, e uytkownik zdawkowo odpowiada na pytania i nie chce dalej pogłębiać wartości, spytaj, czy chce przejść do kolejnej wartości."
-                )
+                "content": osobowosc
+                # "content": (
+                #     f"Jesteś empatycznym i pogłębiającym coachem. "
+                #     f"Pomagasz użytkownikowi odkrywać znaczenie jego wartości: **{wartosc}**.\n"
+                #     f"Stosuj pytania podobne do poniższych (ale nie dosłownie):\n{prompt_szablonowy}\n"
+                #     f"Pytaj, pogłębiaj, zachęcaj do refleksji. Unikaj ocen. "
+                #     f"Skup się na tym, co jest naprawdę ważne dla użytkownika."
+                #     f"Zacznij od dociekania, dlaczego taka wartosść została wybrana."
+                #     f"Zmierzaj do pytań, jakie kroki uytkownik chciałbym podjąć by wzmocnić lub utrzymać realizację wdanej wartości w zyciu."
+                #     f"Jeśli wyczujesz, e uytkownik zdawkowo odpowiada na pytania i nie chce dalej pogłębiać wartości, spytaj, czy chce przejść do kolejnej wartości."
+                # )
             }
         ]
         # AI zadaje pierwsze pytanie automatycznie

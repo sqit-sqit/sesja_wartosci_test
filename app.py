@@ -86,7 +86,7 @@ pokaz_pasek_postepu()
 # Etapy
 if st.session_state["etap"] == "Intro":
     pokaz_intro()
-    if st.button("✅ Kontunuuj"):
+    if st.button("✅ Zaczynamy"):
         st.session_state["etap"] = "wybor_wartosci"
         st.rerun()
 
@@ -164,15 +164,15 @@ with st.sidebar:
     with c1:
         st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
 
-    default_personality = f"""
-Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
-Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.
-Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym, co ważne.
-""".strip()
+#     default_personality = f"""
+# Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
+# Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.
+# Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym, co ważne.
+# """.strip()
 
-    st.session_state["chatbot_personality"] = st.text_area(
-        "🧠 Osobowość chatbota",
-        max_chars=1000,
-        height=200,
-        value=default_personality
-    )
+#     st.session_state["chatbot_personality"] = st.text_area(
+#         "🧠 Osobowość chatbota",
+#         max_chars=1000,
+#         height=200,
+#         value=default_personality
+#     )
