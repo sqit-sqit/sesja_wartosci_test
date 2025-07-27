@@ -76,9 +76,16 @@ if not st.session_state.get("openai_api_key"):
 
 openai_client = get_openai_client()
 
-# Etap
+# Initiation
 if "etap" not in st.session_state:
     st.session_state["etap"] = "Intro"
+
+if "kontynuuj_aktywny" not in st.session_state:
+    st.session_state["kontynuuj_aktywny"] = True
+
+if "coaching_index" not in st.session_state:
+        st.session_state["coaching_index"] = 0
+        st.session_state["coaching_chat"] = {}
 
 st.title(":classical_building: Moje Osobiste Wartości")
 pokaz_pasek_postepu()
@@ -86,15 +93,15 @@ pokaz_pasek_postepu()
 # Etapy
 if st.session_state["etap"] == "Intro":
     pokaz_intro()
-    if st.button("✅ Zaczynamy"):
-        st.session_state["etap"] = "wybor_wartosci"
-        st.rerun()
+ #   if st.button("✅ Zaczynamy"):
+ #       st.session_state["etap"] = "wybor_wartosci"
+ #       st.rerun()
 
 elif st.session_state["etap"] == "wybor_wartosci":
     pokaz_losowe_wartosci_animowane()
-    if st.button("✅ Kontunuuj"):
-        st.session_state["etap"] = "redukcja_do_10"
-        st.rerun()
+#    if st.button("✅ Kontunuuj"):
+#        st.session_state["etap"] = "redukcja_do_10"
+#        st.rerun()
 
 elif st.session_state["etap"] == "redukcja_do_10":
     redukuj_wartosci(limit=10, nastepny_etap="redukcja_do_3", komunikat="Usuń wartości, aż zostanie ich tylko 10.")
@@ -169,10 +176,67 @@ with st.sidebar:
 # Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.
 # Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym, co ważne.
 # """.strip()
-
 #     st.session_state["chatbot_personality"] = st.text_area(
 #         "🧠 Osobowość chatbota",
 #         max_chars=1000,
 #         height=200,
 #         value=default_personality
 #     )
+
+# NAWIGACJA
+
+    if st.session_state.get("kontynuuj_aktywny"):
+        if st.session_state["etap"] == "Intro":
+            if st.button("✅ Zaczynamy"):
+                st.session_state["etap"] = "wybor_wartosci"
+                st.session_state["kontynuuj_aktywny"] = False
+                st.rerun()
+
+        elif st.session_state["etap"] == "wybor_wartosci":
+            if st.button("✅ Kontunuuj"):
+                st.session_state["etap"] = "redukcja_do_10"
+                st.session_state["kontynuuj_aktywny"] = False
+                st.rerun()
+
+        elif st.session_state["etap"] == "redukcja_do_10":
+            if st.button("✅ Kontunuuj"):
+                st.session_state["etap"] = "redukcja_do_3"
+                st.session_state["kontynuuj_aktywny"] = False
+                st.rerun()
+            
+
+        elif st.session_state["etap"] == "redukcja_do_3":
+            if st.button("✅ Kontunuuj"):
+                st.session_state["etap"] = "coaching"
+                st.session_state["kontynuuj_aktywny"] = False
+                st.rerun()
+  
+
+        elif st.session_state["etap"] == "coaching":
+            if st.button("📋 Zakończ proces i przejdź do podsumowania"):
+                st.session_state["kontynuuj_aktywny"] = False
+                st.session_state["etap"] = "podsumowanie"
+                st.rerun()
+
+
+    if st.session_state["etap"] == "redukcja_do_10":
+        if st.button("✅ Wróc"):
+                st.session_state["etap"] = "wybor_wartosci"
+                st.session_state["kontynuuj_aktywny"] = True
+                st.rerun()
+
+    if st.session_state["etap"] == "redukcja_do_3":
+        if st.button("✅ Wróc"):
+                st.session_state["etap"] = "redukcja_do_10"
+                st.session_state["kontynuuj_aktywny"] = True
+                st.rerun()
+
+    if st.session_state["etap"] == "coaching":
+            if st.button("✅ Wróc"):
+                    st.session_state["etap"] = "redukcja_do_3"
+                    st.session_state["coaching_index"]=0
+                    st.session_state["kontynuuj_aktywny"] = True
+                    st.rerun()
+
+    st.subheader( st.session_state["kontynuuj_aktywny"])
+    st.subheader(st.session_state["coaching_index"])

@@ -61,3 +61,8 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
                 st.session_state["user_values"].append(nowa_wartosc)
                 st.session_state["ostatnia_dodana"] = nowa_wartosc
                 st.rerun()
+
+    wartosci = st.session_state["user_values"]
+    if len(wartosci) >0:
+        st.session_state["kontynuuj_aktywny"] = True
+

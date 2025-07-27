@@ -36,13 +36,15 @@ def coaching_dla_wartosci(api_key: str):
     st.markdown("---")
     # if index < 2:
     if index < len(wartosci)-1:
-        if st.button("➡️ Przejdź do kolejnej wartości"):
-            st.session_state["coaching_index"] += 1
-            st.rerun()
+        st.session_state["kontynuuj_aktywny"] = False
+        if st.button("➡️ Przejdź do następnej wartości"):
+           st.session_state["coaching_index"] += 1
+           st.rerun()
     else:
-        if st.button("📋 Zakończ proces i przejdź do podsumowania"):
-            st.session_state["etap"] = "podsumowanie"
-            st.rerun()
+        st.session_state["kontynuuj_aktywny"] = True
+        # if st.button("📋 Zakończ proces i przejdź do podsumowania"):
+        #     st.session_state["etap"] = "podsumowanie"
+        #     st.rerun()
 
 
     # Inicjalizacja historii czatu
@@ -124,13 +126,3 @@ def coaching_dla_wartosci(api_key: str):
                     "total_tokens": response.usage.total_tokens
                 }
             })
-    # Przejście do kolejnej wartości
-    #  st.markdown("---")
-    #. if index < 2:
-    #.     if st.button("➡️ Przejdź do kolejnej wartości"):
-    #          st.session_state["coaching_index"] += 1
-    #.         st.rerun()
-    #. else:
-    #.     if st.button("📋 Zakończ proces i przejdź do podsumowania"):
-    #.         st.session_state["etap"] = "podsumowanie"
-    #.         st.rerun()
