@@ -2,24 +2,36 @@
 import streamlit as st
 
 def pokaz_intro():
-    st.title("👋 Witaj w aplikacji Odkrywania Wartości")
+    # st.title("👋 Witaj w aplikacji Odkrywania Wartości")
 
     st.markdown("""
-    ### 🔍 Cel aplikacji:
-    Ta aplikacja pomoże Ci odkryć, uporządkować i pogłębić refleksję nad Twoimi osobistymi wartościami.
+    ### 🔍 Moje Osobiste Wartości? O co tu chodzi?
+    Jakie według mnie jest jedno z najważniejszych pytań, które sam sobie zadaję? 
+    To pytanie to "Dlaczego?"
+    
+    1. **Dlaczego robię to, co robię?**
+    2. **Dlaczego podejmuję takie a nie inne decyzje?**
+    3. **Dlaczego dokonuję takich a nie innych wyborów**
 
-    ### 🛤 Etapy pracy:
-    1. **Wybór wartości** – wybierzesz lub wpiszesz ważne dla siebie wartości.
-    2. **Redukcja do 10** – ograniczysz swój wybór do 10 kluczowych wartości.
-    3. **Redukcja do 3** – wybierzesz 3 najważniejsze wartości w obecnym etapie życia.
-    4. **Coaching wokół wartości** – wejdziesz w dialog coachingowy wokół wybranych wartości.
-    5. **Podsumowanie** – otrzymasz podsumowanie procesu.
+  
+    Nie tak prosto na to odpowiedzieć, bo te najgłębsze przyczyny, 
+    które o tym decydują są często poukrywane w naszej podświadomości, 
+    ukształtowane przez naszą przeszłość, doświadczenia, i przeżycia.
+    Natomiast te  poukrywane dynamiki kształtują coś, 
+    co nazywamy naszym systemem wartości. 
+    A to już możemy ogarnąć na poziomie świadomym.
+                
+    
+    Zrozumienie swojego systemu wartości to pierwszy krok do zrozumienia siebie.
+    Co mną kieruje. Co dla mnie jest ważne w życiu. Jak to wpływa na moje życiowe priorytety.
+    Jeśli to dla Ciebie ważne, wygospodaruj siebie do pół godziny czasu, tylko dla siebie.  
+    Kliknij przycisk **Zaczynamy** i wejdź w proces refleksji nad własnymi wartościami, 
+    przez który ta aplikacja Ciebie poprowadzi.
 
-    ### 🤝 Jak korzystać:
-    - Dodawaj wartości klikając na proponowane kafelki lub wpisując własne.
-    - Usuwaj i edytuj wartości w panelu bocznym.
-    - Postępuj zgodnie z komunikatami aplikacji krok po kroku.
-    """, unsafe_allow_html=True)
+
+    # """, unsafe_allow_html=True)
+
+    st.session_state["kontynuuj_aktywny"] = True
 
     # if st.button("➡️ Kontynuuj"):
     #     st.session_state["etap"] = "wybor_wartosci"

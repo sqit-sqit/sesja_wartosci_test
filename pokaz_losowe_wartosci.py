@@ -23,6 +23,31 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
     if "dodano_wartosc" not in st.session_state:
         st.session_state["dodano_wartosc"] = False
 
+    with st.expander("👉 Kliknij, aby dowiedzieć się więcej"):
+        st.markdown("""
+        W tej części Twoim zadaniem jest wymienić te wartości, które są dla Ciebie ważne.
+        Możesz je wpisać w polu **Dodaj własną wartość**. 
+        Możesz też skorzystać z podpowiedzi poniżej. 
+        Zwróć uwagę na przycisk **Pokaż inne propozycje** by mieć więcej opcji. 
+        Wybrane przeze Ciebie wartości będą pojawiać się w okienku po lewej stronie.
+        Nie ograniczaj się. Wybieraj to, co z Tobą rezonuje.
+        Ale też nie przesadzaj. Wybór kilkunastu - do dwudziestu wartości wydaje się być optymalnym na tym etapie.
+        Zauważ, że gdy wybierzesz pierwszą wartość, pojawi się po lewej stronie przyciks **Kontynuuj**,
+        ponieważ wybór jednej wartości to takie nezbędne minimum, by iść dalej.
+                    
+        """)
+
+
+    st.markdown("### ✍️ Dodaj własną wartość")
+    nowa_wartosc = st.text_input("wpisz tu swoją wartość")
+    if nowa_wartosc:
+        if "ostatnia_dodana" not in st.session_state or st.session_state["ostatnia_dodana"] != nowa_wartosc:
+            nowa_wartosc = nowa_wartosc.strip()
+            if nowa_wartosc and nowa_wartosc not in st.session_state["user_values"]:
+                st.session_state["user_values"].append(nowa_wartosc)
+                st.session_state["ostatnia_dodana"] = nowa_wartosc
+                st.rerun()
+
     st.markdown("### ✨ Kliknij, aby dodać wartość")
 
     cols = st.columns(5)
@@ -52,15 +77,15 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
         st.rerun()
 
     st.markdown("---")
-    st.markdown("### ✍️ Dodaj własną wartość")
-    nowa_wartosc = st.text_input("wpisz tu swoją wartość")
-    if nowa_wartosc:
-        if "ostatnia_dodana" not in st.session_state or st.session_state["ostatnia_dodana"] != nowa_wartosc:
-            nowa_wartosc = nowa_wartosc.strip()
-            if nowa_wartosc and nowa_wartosc not in st.session_state["user_values"]:
-                st.session_state["user_values"].append(nowa_wartosc)
-                st.session_state["ostatnia_dodana"] = nowa_wartosc
-                st.rerun()
+    # st.markdown("### ✍️ Dodaj własną wartość")
+    # nowa_wartosc = st.text_input("wpisz tu swoją wartość")
+    # if nowa_wartosc:
+    #     if "ostatnia_dodana" not in st.session_state or st.session_state["ostatnia_dodana"] != nowa_wartosc:
+    #         nowa_wartosc = nowa_wartosc.strip()
+    #         if nowa_wartosc and nowa_wartosc not in st.session_state["user_values"]:
+    #             st.session_state["user_values"].append(nowa_wartosc)
+    #             st.session_state["ostatnia_dodana"] = nowa_wartosc
+    #             st.rerun()
 
     wartosci = st.session_state["user_values"]
     if len(wartosci) >0:

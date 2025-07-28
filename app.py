@@ -88,7 +88,7 @@ if "coaching_index" not in st.session_state:
         st.session_state["coaching_chat"] = {}
 
 st.title(":classical_building: Moje Osobiste Wartości")
-pokaz_pasek_postepu()
+# pokaz_pasek_postepu()
 
 # Etapy
 if st.session_state["etap"] == "Intro":

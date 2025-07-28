@@ -1,7 +1,18 @@
 import streamlit as st
 
 def redukuj_wartosci(limit, nastepny_etap, komunikat):
-    st.subheader("🎯 Redukcja wartości")
+    
+    with st.expander("👉 Kliknij, aby dowiedzieć się więcej"):
+        st.markdown(f"""
+        Ogranicz wartości do **{limit}**.  
+        Teraz jest moment, by dokonać wyboru usuwając mniej istotne dla Ciebie wartości tak,
+        by zostało ich nie więcej niż **{limit}**.
+        Gdy zostanie **{limit}** lub mniej wartości, pojawi się przycis **Kontynuuj**, 
+        który pozwoli przejść do następnego etapu
+
+                    
+        """)
+    st.subheader("🎯 Wybór ważniejszych wartości")
     st.info(komunikat)
 
     if "user_values" not in st.session_state or not st.session_state["user_values"]:

@@ -20,7 +20,17 @@ def wczytaj_osobowosc(path="chatbot_personality_coach.txt", wartosc="", prompt_s
 
 def coaching_dla_wartosci(api_key: str):
     client = OpenAI(api_key=api_key)
-    st.title("🧭 Porozmawiajmy o Twoich wartościach")
+
+    with st.expander("👉 Kliknij, aby dowiedzieć się więcej"):
+        st.markdown(f"""
+        Pozwól sobie teraz na głębszą reflekeję nad wybranym wartościami.
+        Dlaczego zostały wybrane?
+        Jak wpływają na Twoje wybory i decyzjie?
+        Na ile możesz je realizować w swoim życiu?  
+        Gdy poczujesz, że refleksja na temat danej wartości już się wyczerpała,
+        możesz przejść do kolejnej.
+        """)
+    # st.title("🧭 Porozmawiajmy o Twoich wartościach")
     wartosci = st.session_state.get("user_values", [])
     if len(wartosci) == 0:
         st.warning("Ten etap wymaga przynajmniej jednej wybranej wartości.")
@@ -30,14 +40,14 @@ def coaching_dla_wartosci(api_key: str):
         st.session_state["coaching_chat"] = {}
     index = st.session_state["coaching_index"]
     wartosc = wartosci[index]
-    st.subheader(f"🌀 Wartość #{index+1}: **{wartosc}**")
+    st.subheader(f"🌀 Wartość #{index+1}:   **{wartosc}**")
 
     # Przejście do kolejnej wartości
     st.markdown("---")
     # if index < 2:
     if index < len(wartosci)-1:
         st.session_state["kontynuuj_aktywny"] = False
-        if st.button("➡️ Przejdź do następnej wartości"):
+        if st.button("➡️ Przejdź do kolejnej wartości"):
            st.session_state["coaching_index"] += 1
            st.rerun()
     else:
