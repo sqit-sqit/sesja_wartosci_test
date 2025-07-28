@@ -32,6 +32,22 @@ LICZBA_WARTOSCI = 10
 
 env = dotenv_values(".env")
 
+def autoryzacja_do_raportow():
+    with st.sidebar:
+        st.markdown("## 🔐 Dostęp do raportów")
+
+        # login = st.text_input("Login", key="raport_login")
+        password = st.text_input("Hasło", type="password", key="raport_password")
+        if os.environ.get('APP_ENV') != 'production':
+            if password == env.get("RAPORT_PASSWORD"):
+                st.session_state["raport_autoryzowany"] = True
+            else:
+                st.session_state["raport_autoryzowany"] = False
+        elif os.environ.get('APP_ENV') == 'production':
+            if password == os.environ["RAPORT_PASSWORD"]:
+                st.session_state["raport_autoryzowany"] = True
+            else:
+                st.session_state["raport_autoryzowany"] = False
 
 
 # # OpenAI API key
@@ -247,5 +263,19 @@ with st.sidebar:
 
     st.markdown("---")
     st.markdown("---")
-    if st.button(" 🧾  Logs"):
+
+    
+    # if st.button(" Logi"):
+    if "raport_autoryzowany" not in st.session_state:
+        st.session_state["raport_autoryzowany"] = False
+
+    autoryzacja_do_raportow()
+
+    if st.session_state["raport_autoryzowany"]:
         panel_raportow()
+    else:
+        st.warning("🔒 Wprowadź poprawne dane logowania, aby uzyskać dostęp do raportów.")
+
+
+    # if st.button(" 🧾  Logs"):
+    #     panel_raportow()

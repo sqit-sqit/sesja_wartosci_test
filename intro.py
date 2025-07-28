@@ -28,15 +28,15 @@ def pokaz_intro():
                 
     Jeśli to dla Ciebie ważne, wygospodaruj siebie do pół godziny czasu, tylko dla siebie
     i poeksploruj, co Ciebie napędza. 
+
+    Kliknij przycisk **Zaczynamy** i wejdź w proces refleksji nad własnymi wartościami,
                 
 
     **UWAGA:** 
                 
     Dane z tej sesji są logowane. Zostaną zapisane wartości, które wybierzesz, 
-    treść refleksji z formie dialogu z Agentem oraz treść podsumowania. Nie będą logowane  
-    Kliknij przycisk **Zaczynamy** i wejdź w proces refleksji nad własnymi wartościami,
-    przez który ta aplikacja Ciebie poprowadzi. Wszystko po to, by Agenta można było udoskonalać,
-    by lepiej służył kolejnym użytkownikom.
+    treść refleksji z formie dialogu z Agentem oraz treść podsumowania. 
+    Wszystko po to, by Agenta można było udoskonalać, by lepiej służył kolejnym użytkownikom.
     Nie będą logowane żadne dane, które umożliwiłyby zidentifikowanie Ciebie.
     Natomiast jeśli nie wyrażasz zgody na logowanie Twojej sesji, po prostu przerwij proces.
 
