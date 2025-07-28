@@ -137,19 +137,34 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-    col1, col2 = st.columns(2)
-    for i, val in enumerate(st.session_state["user_values"]):
-        col = col1 if i % 2 == 0 else col2
-        with col:
-            inner_cols = st.columns([5, 1])
-            with inner_cols[0]:
-                st.markdown(f"<div style='padding: 4px 0px;'>✅ <b>{val}</b></div>", unsafe_allow_html=True)
-            with inner_cols[1]:
-                if st.button("×", key=f"delete_{val}", help=f"Usuń wartość: {val}"):
-                    st.session_state["last_deleted"] = val
-                    st.session_state["user_values"].remove(val)
-                    st.rerun()
+    wartosci = st.session_state["user_values"]
+    kol1, kol2 = st.columns(2)
+    for i, val in enumerate(wartosci.copy()):
+        kol = kol1 if i % 2 == 0 else kol2
+        with kol:
+            usun = st.button(f"× {val}", key=f"usun_sidebar_{val}")
+            if usun:
+                wartosci.remove(val)
+                st.session_state["last_deleted"] = val
+                st.rerun()
 
+
+# poprzedni wygląd wybranych wartości
+
+    # col1, col2 = st.columns(2)
+    # for i, val in enumerate(st.session_state["user_values"]):
+    #     col = col1 if i % 2 == 0 else col2
+    #     with col:
+    #         inner_cols = st.columns([5, 1])
+    #         with inner_cols[0]:
+    #             st.markdown(f"<div style='padding: 4px 0px;'>✅ <b>{val}</b></div>", unsafe_allow_html=True)
+    #         with inner_cols[1]:
+    #             if st.button("×", key=f"delete_{val}", help=f"Usuń wartość: {val}"):
+    #                 st.session_state["last_deleted"] = val
+    #                 st.session_state["user_values"].remove(val)
+    #                 st.rerun()
+
+    st.markdown("---")
     if "last_deleted" in st.session_state:
         if st.button("↩️ Przywróć ostatnio usuniętą"):
             val = st.session_state.pop("last_deleted")
@@ -165,11 +180,11 @@ with st.sidebar:
             total_cost += message["usage"]["prompt_tokens"] * PRICING["input_tokens"]
             total_cost += message["usage"]["completion_tokens"] * PRICING["output_tokens"]
 
-    c0, c1 = st.columns(2)
-    with c0:
-        st.metric("Koszt rozmowy (USD)", f"${total_cost:.4f}")
-    with c1:
-        st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
+    # c0, c1 = st.columns(2)
+    # with c0:
+    #     st.metric("Koszt rozmowy (USD)", f"${total_cost:.4f}")
+    # with c1:
+    #     st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
 
 #     default_personality = f"""
 # Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
@@ -220,23 +235,23 @@ with st.sidebar:
 
 
     if st.session_state["etap"] == "redukcja_do_10":
-        if st.button("✅ Wróc"):
+        if st.button(" ↩  Wróc"):
                 st.session_state["etap"] = "wybor_wartosci"
                 st.session_state["kontynuuj_aktywny"] = True
                 st.rerun()
 
     if st.session_state["etap"] == "redukcja_do_3":
-        if st.button("✅ Wróc"):
+        if st.button(" ↩  Wróc"):
                 st.session_state["etap"] = "redukcja_do_10"
                 st.session_state["kontynuuj_aktywny"] = True
                 st.rerun()
 
     if st.session_state["etap"] == "coaching":
-            if st.button("✅ Wróc"):
+            if st.button(" ↩  Wróc"):
                     st.session_state["etap"] = "redukcja_do_3"
                     st.session_state["coaching_index"]=0
                     st.session_state["kontynuuj_aktywny"] = True
                     st.rerun()
 
-    st.subheader( st.session_state["kontynuuj_aktywny"])
-    st.subheader(st.session_state["coaching_index"])
+    # st.subheader( st.session_state["kontynuuj_aktywny"])
+    # st.subheader(st.session_state["coaching_index"])

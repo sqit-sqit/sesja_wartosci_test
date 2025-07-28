@@ -2,9 +2,9 @@ import streamlit as st
 
 def redukuj_wartosci(limit, nastepny_etap, komunikat):
     
-    with st.expander("👉 Kliknij, aby dowiedzieć się więcej"):
+    with st.expander("👉 Kliknij po krótką instrukcję"):
         st.markdown(f"""
-        Ogranicz wartości do **{limit}**.  
+        **Ogranicz liczbę wartości do {limit}**.  
         Teraz jest moment, by dokonać wyboru usuwając mniej istotne dla Ciebie wartości tak,
         by zostało ich nie więcej niż **{limit}**.
         Gdy zostanie **{limit}** lub mniej wartości, pojawi się przycis **Kontynuuj**, 
@@ -21,14 +21,14 @@ def redukuj_wartosci(limit, nastepny_etap, komunikat):
 
     wartosci = st.session_state["user_values"]
 
-    kol1, kol2 = st.columns(2)
-    for i, val in enumerate(wartosci.copy()):
-        kol = kol1 if i % 2 == 0 else kol2
-        with kol:
-            usun = st.button(f"× {val}", key=f"usun_{val}")
-            if usun:
-                wartosci.remove(val)
-                st.rerun()
+    # kol1, kol2 = st.columns(2)
+    # for i, val in enumerate(wartosci.copy()):
+    #     kol = kol1 if i % 2 == 0 else kol2
+    #     with kol:
+    #         usun = st.button(f"× {val}", key=f"usun_{val}")
+    #         if usun:
+    #             wartosci.remove(val)
+    #             st.rerun()
 
     st.markdown("---")
     if len(wartosci) <= limit:

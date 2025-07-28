@@ -23,7 +23,7 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
     if "dodano_wartosc" not in st.session_state:
         st.session_state["dodano_wartosc"] = False
 
-    with st.expander("👉 Kliknij, aby dowiedzieć się więcej"):
+    with st.expander("👉 Kliknij po krótką instrukcję"):
         st.markdown("""
         W tej części Twoim zadaniem jest wymienić te wartości, które są dla Ciebie ważne.
         Możesz je wpisać w polu **Dodaj własną wartość**. 
@@ -34,6 +34,9 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
         Ale też nie przesadzaj. Wybór kilkunastu - do dwudziestu wartości wydaje się być optymalnym na tym etapie.
         Zauważ, że gdy wybierzesz pierwszą wartość, pojawi się po lewej stronie przyciks **Kontynuuj**,
         ponieważ wybór jednej wartości to takie nezbędne minimum, by iść dalej.
+                    
+        Uwaga: kliknięcie na wybraną wartość powoduje jej usunięcie. 
+        To może być przydatne, jeśli chcesz zrezygnować z wybranej wartości.
                     
         """)
 

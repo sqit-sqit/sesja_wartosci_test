@@ -21,7 +21,7 @@ def wczytaj_osobowosc(path="chatbot_personality_coach.txt", wartosc="", prompt_s
 def coaching_dla_wartosci(api_key: str):
     client = OpenAI(api_key=api_key)
 
-    with st.expander("👉 Kliknij, aby dowiedzieć się więcej"):
+    with st.expander("👉 Kliknij po krótką instrukcjęj"):
         st.markdown(f"""
         Pozwól sobie teraz na głębszą reflekeję nad wybranym wartościami.
         Dlaczego zostały wybrane?
