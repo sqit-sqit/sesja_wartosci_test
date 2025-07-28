@@ -22,5 +22,17 @@ def panel_raportow(folder_path="podsumowania"):
                 label=f"⬇️ Pobierz: {plik.name}",
                 data=f,
                 file_name=plik.name,
-                mime="text/plain"  # ← zmieniony MIME
+                mime="text/plain"  
             )
+def usun_raporty(folder_path="podsumowania"):
+    katalog = Path(folder_path)
+    if st.button("🗑️ Usuń wszystkie pliki z katalogu"):
+        usuniete = 0
+        for plik in katalog.iterdir():
+            if plik.is_file():
+                try:
+                    plik.unlink()
+                    usuniete += 1
+                except Exception as e:
+                    st.error(f"Nie udało się usunąć pliku {plik.name}: {e}")
+        st.success(f"✅ Usunięto {usuniete} plików z katalogu `{katalog}`.")

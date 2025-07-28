@@ -13,7 +13,7 @@ from intro import pokaz_intro
 from podsumowanie import pokaz_podsumowanie
 
 #raporty
-from panel_raportow import panel_raportow
+from panel_raportow import panel_raportow, usun_raporty
 
 model_pricings = {
     "gpt-4o": {
@@ -264,17 +264,29 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("---")
 
-    
-    # if st.button(" Logi"):
-    if "raport_autoryzowany" not in st.session_state:
-        st.session_state["raport_autoryzowany"] = False
 
-    autoryzacja_do_raportow()
 
-    if st.session_state["raport_autoryzowany"]:
-        panel_raportow()
-    else:
-        st.warning("🔒 Wprowadź poprawne dane logowania, aby uzyskać dostęp do raportów.")
+    if st.session_state["etap"] == "Intro":
+        if "pokaz_logi" not in st.session_state:
+            st.session_state["pokaz_logi"] = False
+
+        
+        if st.button(" Logi"):
+        #    st.session_state["pokaz_logi"] = True
+            st.session_state["pokaz_logi"] = not st.session_state.get("pokaz_logi", False)
+
+        if st.session_state["pokaz_logi"]:
+
+            if "raport_autoryzowany" not in st.session_state:
+                st.session_state["raport_autoryzowany"] = False
+            autoryzacja_do_raportow()
+            if st.session_state["raport_autoryzowany"]:
+                usun_raporty()
+                panel_raportow()
+                
+
+            else:
+                st.warning("🔒 Wprowadź poprawne dane logowania, aby uzyskać dostęp do raportów.")
 
 
     # if st.button(" 🧾  Logs"):
