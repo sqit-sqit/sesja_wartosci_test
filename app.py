@@ -112,7 +112,7 @@ elif st.session_state["etap"] == "redukcja_do_10":
     redukuj_wartosci(limit=10, nastepny_etap="redukcja_do_3", komunikat="Usuń wartości, aż zostanie ich tylko 10.")
 
 elif st.session_state["etap"] == "redukcja_do_3":
-    redukuj_wartosci(limit=1, nastepny_etap="coaching", komunikat="Usuń wartości, aż zostaną tylko 3.")
+    redukuj_wartosci(limit=1, nastepny_etap="coaching", komunikat="Usuń wartości, aż zostanie tylko 1.")
 
 elif st.session_state["etap"] == "coaching":
     coaching_dla_wartosci(api_key=st.session_state["openai_api_key"])
