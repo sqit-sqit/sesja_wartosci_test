@@ -2,7 +2,7 @@ import streamlit as st
 
 def redukuj_wartosci(limit, nastepny_etap, komunikat):
     
-    with st.expander("👉 Kliknij po krótką instrukcję"):
+    with st.expander("👉 Kliknij, by schować lub rozwiniąć tę sekcję", expanded=True):
         st.markdown(f"""
         **Ogranicz liczbę wartości do {limit}**.  
         Teraz jest moment, by dokonać wyboru usuwając mniej istotne dla Ciebie wartości tak,

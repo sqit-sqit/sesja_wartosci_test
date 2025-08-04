@@ -27,3 +27,10 @@
 #         "content": response.choices[0].message.content,
 #         "usage": usage,
 #     }
+
+
+
+# openai_client = get_openai_client()
+# def get_openai_client():
+#     return OpenAI(api_key=st.session_state["openai_api_key"])
+

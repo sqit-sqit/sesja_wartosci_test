@@ -23,7 +23,7 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
     if "dodano_wartosc" not in st.session_state:
         st.session_state["dodano_wartosc"] = False
 
-    with st.expander("👉 Kliknij po krótką instrukcję"):
+    with st.expander("👉 Kliknij, by schować lub rozwiniąć tę sekcję", expanded=True):
         st.markdown("""
         W tej części Twoim zadaniem jest wymienić te wartości, które są dla Ciebie ważne.
         Możesz je wpisać w polu **Dodaj własną wartość**. 

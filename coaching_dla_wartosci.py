@@ -21,14 +21,14 @@ def wczytaj_osobowosc(path="chatbot_personality_coach.txt", wartosc="", prompt_s
 def coaching_dla_wartosci(api_key: str):
     client = OpenAI(api_key=api_key)
 
-    with st.expander("👉 Kliknij po krótką instrukcjęj"):
+    with st.expander("👉 Kliknij, by schować lub rozwiniąć tę sekcję", expanded=True):
         st.markdown(f"""
-        Pozwól sobie teraz na głębszą reflekeję nad wybranym wartościami.
-        Dlaczego zostały wybrane?
-        Jak wpływają na Twoje wybory i decyzjie?
-        Na ile możesz je realizować w swoim życiu?  
+        Pozwól sobie teraz na głębszą reflekeję nad wybraną wartością.
+        Dlaczego została wybrana?
+        Jak wpływa na Twoje wybory i decyzjie?
+        Na ile możesz ją realizować w swoim życiu?  
         Gdy poczujesz, że refleksja na temat danej wartości już się wyczerpała,
-        możesz przejść do kolejnej.
+        możesz przejść do podsumowania.
         """)
     # st.title("🧭 Porozmawiajmy o Twoich wartościach")
     wartosci = st.session_state.get("user_values", [])
