@@ -16,7 +16,7 @@ Zaufanie
 Wdzięczność
 Otwartość
 Akceptacja
-Bezpieczeństwo	
+Bezpieczeństwo
 Równość
 Samodyscyplina
 Autentyczność
@@ -48,7 +48,6 @@ Miłosierdzie
 Lojalność
 Solidarność
 Dobro
-Pokora
 Samopoznanie
 Edukacja
 Mądrość
@@ -64,7 +63,6 @@ Zabawa
 Twórczość
 Przyjemność
 Satysfakcja
-Wdzięczność
 Równowaga
 Uważność
 Spokój
@@ -90,7 +88,6 @@ Miłość do siebie
 Troska o innych
 Zdolność słuchania
 Znaczenie
-Duchowość
 Połączenie z innymi
 Cisza wewnętrzna
 Wdzięczność za życie
@@ -98,8 +95,4 @@ Doświadczenie
 Osiągnięcia
 Cel
 Obecność
-wiara
-Znaczenie
-Duchowość
-nadzieja
-odwaga
+Wiara
