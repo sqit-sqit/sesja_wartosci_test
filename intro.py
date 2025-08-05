@@ -26,7 +26,7 @@ def pokaz_intro():
     Zrozumienie swojego systemu wartości to pierwszy krok do zrozumienia siebie.
     Co mną kieruje. Co dla mnie jest ważne w życiu. Jak to wpływa na moje życiowe priorytety.
                 
-    Jeśli to dla Ciebie ważne, wygospodaruj siebie do pół godziny czasu, tylko dla siebie
+    Jeśli to dla Ciebie ważne, wygospodaruj sobie do pół godziny czasu, tylko dla siebie
     i poeksploruj, co Ciebie napędza. 
 
     Kliknij przycisk **Zaczynamy** i wejdź w proces refleksji nad własnymi wartościami,

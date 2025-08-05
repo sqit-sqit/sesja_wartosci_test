@@ -32,8 +32,8 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
         Wybrane przeze Ciebie wartości będą pojawiać się w okienku po lewej stronie.
         Nie ograniczaj się. Wybieraj to, co z Tobą rezonuje.
         Ale też nie przesadzaj. Wybór kilkunastu - do dwudziestu wartości wydaje się być optymalnym na tym etapie.
-        Zauważ, że gdy wybierzesz pierwszą wartość, pojawi się po lewej stronie przyciks **Kontynuuj**,
-        ponieważ wybór jednej wartości to takie nezbędne minimum, by iść dalej.
+        Zauważ, że gdy wybierzesz pierwszą wartość, pojawi się po lewej stronie przycisk **Kontynuuj**,
+        ponieważ wybór jednej wartości to takie niezbędne minimum, by iść dalej.
                     
         Uwaga: kliknięcie na wybraną wartość powoduje jej usunięcie. 
         To może być przydatne, jeśli chcesz zrezygnować z wybranej wartości.

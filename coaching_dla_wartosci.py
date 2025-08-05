@@ -23,9 +23,9 @@ def coaching_dla_wartosci(api_key: str):
 
     with st.expander("👉 Kliknij, by schować lub rozwiniąć tę sekcję", expanded=True):
         st.markdown(f"""
-        Pozwól sobie teraz na głębszą reflekeję nad wybraną wartością.
+        Pozwól sobie teraz na głębszą refleksję nad wybraną wartością.
         Dlaczego została wybrana?
-        Jak wpływa na Twoje wybory i decyzjie?
+        Jak wpływa na Twoje wybory i decyzje?
         Na ile możesz ją realizować w swoim życiu?  
         Gdy poczujesz, że refleksja na temat danej wartości już się wyczerpała,
         możesz przejść do podsumowania.

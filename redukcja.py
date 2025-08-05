@@ -7,7 +7,7 @@ def redukuj_wartosci(limit, nastepny_etap, komunikat):
         **Ogranicz liczbę wartości do {limit}**.  
         Teraz jest moment, by dokonać wyboru usuwając mniej istotne dla Ciebie wartości tak,
         by zostało ich nie więcej niż **{limit}**.
-        Gdy zostanie **{limit}** lub mniej wartości, pojawi się przycis **Kontynuuj**, 
+        Gdy zostanie **{limit}** lub mniej wartości, pojawi się przycisk **Kontynuuj**, 
         który pozwoli przejść do następnego etapu
 
                     
