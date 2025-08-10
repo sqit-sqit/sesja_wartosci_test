@@ -8,9 +8,10 @@ import os
 from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
 from redukcja import redukuj_wartosci
 from etap_postepu import pokaz_pasek_postepu
-from coaching_dla_wartosci import coaching_dla_wartosci
+from podsumowanie_coachingowe import podsumowanie_coachingowe
 from intro import pokaz_intro
 from podsumowanie import pokaz_podsumowanie
+from wybor_top_3 import wybor_top_3
 
 #raporty
 from panel_raportow import panel_raportow, usun_raporty
@@ -25,7 +26,7 @@ model_pricings = {
         "output_tokens": 0.600 / 1_000_000,
     }
 }
-MODEL = "gpt-4o"
+MODEL = "gpt-4o-mini"
 USD_TO_PLN = 3.97
 PRICING = model_pricings[MODEL]
 LICZBA_WARTOSCI = 10
@@ -85,6 +86,9 @@ if not st.session_state.get("openai_api_key"):
 if "etap" not in st.session_state:
     st.session_state["etap"] = "Intro"
 
+if "wybrana_wartosc" not in st.session_state:
+    st.session_state["wybrana_wartosc"] = []
+
 if "kontynuuj_aktywny" not in st.session_state:
     st.session_state["kontynuuj_aktywny"] = True
 
@@ -109,14 +113,13 @@ elif st.session_state["etap"] == "wybor_wartosci":
 #        st.rerun()
 
 elif st.session_state["etap"] == "redukcja_do_10":
-    redukuj_wartosci(limit=10, nastepny_etap="redukcja_do_3", komunikat="Usuń wartości, aż zostanie ich tylko 10.")
+    redukuj_wartosci(limit=10, nastepny_etap="wybor_top_3", komunikat="Usuń wartości, aż zostanie ich tylko 10.")
 
-elif st.session_state["etap"] == "redukcja_do_3":
-    redukuj_wartosci(limit=1, nastepny_etap="coaching", komunikat="Usuń wartości, aż zostanie tylko 1.")
+elif st.session_state["etap"] == "wybor_top_3":
+    wybor_top_3(api_key=st.session_state["openai_api_key"])
 
-elif st.session_state["etap"] == "coaching":
-    coaching_dla_wartosci(api_key=st.session_state["openai_api_key"])
-
+elif st.session_state["etap"] == "podsumowanie_coachingowe":
+    podsumowanie_coachingowe(api_key=st.session_state["openai_api_key"])
 
 elif st.session_state["etap"] == "podsumowanie":
     pokaz_podsumowanie(
@@ -137,37 +140,99 @@ with st.sidebar:
         st.session_state["user_values"] = []
 
     liczba_wartosci = len(st.session_state["user_values"])
-    st.markdown(
-        f"<div style='font-size: 1.1rem; margin-bottom: 1rem;'>🔢 Wybranych wartości: <b>{liczba_wartosci}</b></div>",
-        unsafe_allow_html=True
-    )
+    etap = st.session_state["etap"]
+
+
 
     wartosci = st.session_state["user_values"]
-    kol1, kol2 = st.columns(2)
-    for i, val in enumerate(wartosci.copy()):
-        kol = kol1 if i % 2 == 0 else kol2
-        with kol:
-            usun = st.button(f"× {val}", key=f"usun_sidebar_{val}")
-            if usun:
-                wartosci.remove(val)
-                st.session_state["last_deleted"] = val
-                st.rerun()
+    
+    if (
+        st.session_state["etap"] == "Intro"
+        or st.session_state["etap"] == "wybor_wartosci"
+        or st.session_state["etap"] == "redukcja_do_10"
+    ):    
+        st.markdown(
+            f"<div style='font-size: 1.1rem; margin-bottom: 1rem;'>🔢 Wybranych wartości: <b>{liczba_wartosci}</b></div>",
+            unsafe_allow_html=True
+        )        
+        
+        kol1, kol2 = st.columns(2)
+        for i, val in enumerate(wartosci.copy()):
+            kol = kol1 if i % 2 == 0 else kol2
+            with kol:
+                usun = st.button(f"× {val}", key=f"usun_sidebar_{val}")
+                if usun:
+                    wartosci.remove(val)
+                    st.session_state["last_deleted"] = val
+                    st.rerun()
 
 
-# poprzedni wygląd wybranych wartości
 
-    # col1, col2 = st.columns(2)
-    # for i, val in enumerate(st.session_state["user_values"]):
-    #     col = col1 if i % 2 == 0 else col2
-    #     with col:
-    #         inner_cols = st.columns([5, 1])
-    #         with inner_cols[0]:
-    #             st.markdown(f"<div style='padding: 4px 0px;'>✅ <b>{val}</b></div>", unsafe_allow_html=True)
-    #         with inner_cols[1]:
-    #             if st.button("×", key=f"delete_{val}", help=f"Usuń wartość: {val}"):
-    #                 st.session_state["last_deleted"] = val
-    #                 st.session_state["user_values"].remove(val)
-    #                 st.rerun()
+    if st.session_state["etap"] == "wybor_top_3":
+        # st.subheader("🧩 Wybierz 3 najważniejsze wartości")
+
+        # if "top_3" not in st.session_state:
+        #     st.session_state["top_3"] = []
+
+        # if "wybrana_wartosc" not in st.session_state:
+        #     st.session_state["wybrana_wartosc"] = None
+
+        # kol1, kol2 = st.columns(2)
+        # top_10 = st.session_state["user_values"]  # założenie: wcześniej zredukowano do 10
+
+        # for i, val in enumerate(top_10):
+        #     kol = kol1 if i % 2 == 0 else kol2
+        #     with kol:
+        #         if st.button(val, key=f"top3_sidebar_{val}"):
+        #             if val not in st.session_state["top_3"] and len(st.session_state["top_3"]) < 3:
+        #                 st.session_state["top_3"].append(val)
+        #                 st.session_state["wybrana_wartosc"] = val
+        st.markdown("### 🔘 Wybierz 3 kluczowe wartości:")
+        top_10 = st.session_state["user_values"]
+        kol1, kol2 = st.columns(2)
+        for i, val in enumerate(top_10):
+            kol = kol1 if i % 2 == 0 else kol2
+            with kol:
+                if st.button(val, key=f"top3_{val}"):
+                    if val not in st.session_state["top_3"]:
+                        if len(st.session_state["top_3"]) < 3:
+                            st.session_state["top_3"].append(val)
+                            st.session_state["aktywny_chat_top3"] = val
+                            st.rerun()
+                    else:
+                        st.session_state["top_3"].remove(val)
+                        if st.session_state["aktywny_chat_top3"] == val:
+                            st.session_state["aktywny_chat_top3"] = None
+                        st.rerun()
+
+    if (
+        st.session_state["etap"] == "podsumowanie_coachingowe"
+        or st.session_state["etap"] == "podsumowanie"
+    ):
+        # st.markdown("### 🔘 Twoje 3 kluczowe wartości:")
+        top3 = st.session_state.get("top_3", [])
+
+        if not top3:
+            st.info("Brak wybranych wartości TOP 3.")
+        else:
+            for val in top3:
+                st.markdown(
+                    f"""
+                    <div style='
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        padding: 6px 10px;
+                        margin-bottom: 6px;
+                        background-color: #f9f9f9;
+                        font-size: 1rem;
+                        font-weight: 500;
+                        text-align: center;
+                    '>{val}</div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+
 
     st.markdown("---")
     if "last_deleted" in st.session_state:
@@ -185,23 +250,7 @@ with st.sidebar:
             total_cost += message["usage"]["prompt_tokens"] * PRICING["input_tokens"]
             total_cost += message["usage"]["completion_tokens"] * PRICING["output_tokens"]
 
-    # c0, c1 = st.columns(2)
-    # with c0:
-    #     st.metric("Koszt rozmowy (USD)", f"${total_cost:.4f}")
-    # with c1:
-    #     st.metric("Koszt rozmowy (PLN)", f"{total_cost * USD_TO_PLN:.4f}")
 
-#     default_personality = f"""
-# Jesteś ciepłym, empatycznym i wspierającym agentem rozwojowym.
-# Pomagasz użytkownikowi kierować się jego wartościami: {', '.join(st.session_state.get('user_values', []))}.
-# Odpowiadasz jasno, inspirująco i z szacunkiem. Pomagasz działać zgodnie z tym, co ważne.
-# """.strip()
-#     st.session_state["chatbot_personality"] = st.text_area(
-#         "🧠 Osobowość chatbota",
-#         max_chars=1000,
-#         height=200,
-#         value=default_personality
-#     )
 
 # NAWIGACJA
 
@@ -220,19 +269,19 @@ with st.sidebar:
 
         elif st.session_state["etap"] == "redukcja_do_10":
             if st.button("✅ Kontunuuj"):
-                st.session_state["etap"] = "redukcja_do_3"
+                st.session_state["etap"] = "wybor_top_3"
                 st.session_state["kontynuuj_aktywny"] = False
                 st.rerun()
             
 
-        elif st.session_state["etap"] == "redukcja_do_3":
+        elif st.session_state["etap"] == "wybor_top_3":
             if st.button("✅ Kontunuuj"):
-                st.session_state["etap"] = "coaching"
+                st.session_state["etap"] = "podsumowanie_coachingowe"
                 st.session_state["kontynuuj_aktywny"] = False
                 st.rerun()
   
 
-        elif st.session_state["etap"] == "coaching":
+        elif st.session_state["etap"] == "podsumowanie_coachingowe":
             if st.button("📋 Zakończ proces i przejdź do podsumowania"):
                 st.session_state["kontynuuj_aktywny"] = False
                 st.session_state["etap"] = "podsumowanie"
@@ -245,7 +294,7 @@ with st.sidebar:
                 st.session_state["kontynuuj_aktywny"] = True
                 st.rerun()
 
-    if st.session_state["etap"] == "redukcja_do_3":
+    if st.session_state["etap"] == "wybor_top_3":
         if st.button(" ↩  Wróc"):
                 st.session_state["etap"] = "redukcja_do_10"
                 st.session_state["kontynuuj_aktywny"] = True
@@ -253,13 +302,10 @@ with st.sidebar:
 
     if st.session_state["etap"] == "coaching":
             if st.button(" ↩  Wróc"):
-                    st.session_state["etap"] = "redukcja_do_3"
+                    st.session_state["etap"] = "wybor_top_3"
                     st.session_state["coaching_index"]=0
                     st.session_state["kontynuuj_aktywny"] = True
                     st.rerun()
-
-    # st.subheader( st.session_state["kontynuuj_aktywny"])
-    # st.subheader(st.session_state["coaching_index"])
 
     st.markdown("---")
     st.markdown("---")
@@ -287,7 +333,3 @@ with st.sidebar:
 
             else:
                 st.warning("🔒 Wprowadź poprawne dane logowania, aby uzyskać dostęp do raportów.")
-
-
-    # if st.button(" 🧾  Logs"):
-    #     panel_raportow()
