@@ -12,7 +12,7 @@ def wczytaj_szablony(plik="pytania_poglebiajace.txt"):
         return [linia.strip() for linia in f if linia.strip()]
 
 
-def wybor_top_3(api_key: str):
+def wybor_top_3(api_key: str, model: str):
     # st.title("🏅 Wybierz 3 Najważniejsze Wartości")
     st.subheader("🎯 Wybierz 3 Najważniejsze Wartości")
 
@@ -86,8 +86,12 @@ def wybor_top_3(api_key: str):
 
             # AI zadaje pierwsze pytanie
             response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=st.session_state["coaching_top_3"][wybrana]
+                model=model,
+                messages=st.session_state["coaching_top_3"][wybrana],
+                temperature=0.9,
+                top_p=0.95,
+                presence_penalty=0.6,
+                frequency_penalty=0.2,
             )
             first_msg = response.choices[0].message.content.strip()
             st.session_state["coaching_top_3"][wybrana].append(
@@ -125,14 +129,14 @@ def wybor_top_3(api_key: str):
             thinking.info("⏳ Daj mi chwilę... zbieram myśli :)")
             with st.spinner("Daj mi chwilę... zbieram myśli..."):
                 response = client.chat.completions.create(
-                    model="gpt-4o",
+                    model=model,
                     messages=st.session_state["coaching_top_3"][wybrana]
                 )
             thinking.empty()
 
             with st.chat_message("assistant"):
                 response = client.chat.completions.create(
-                    model="gpt-4o",
+                    model=model,
                     messages=st.session_state["coaching_top_3"][wybrana]
                 )
                 ai_reply = response.choices[0].message.content.strip()

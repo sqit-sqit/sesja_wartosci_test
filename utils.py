@@ -1,4 +1,6 @@
+
 from pathlib import Path
+
 
 def wczytaj_osobowosc(path="chatbot_personality_coach.txt", wartosc="", prompt_szablonowy=""):
     if not Path(path).exists():
@@ -13,3 +15,5 @@ def wczytaj_szablony(plik="pytania_poglebiajace.txt"):
         return []
     with open(sciezka, "r", encoding="utf-8") as f:
         return [linia.strip() for linia in f if linia.strip()]
+    
+

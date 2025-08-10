@@ -3,7 +3,9 @@ from openai import OpenAI
 from datetime import datetime
 from pathlib import Path
 
-def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o-mini", pricing=None, usd_to_pln=4.0):
+def pokaz_podsumowanie(api_key: str, model: str, pricing=None, usd_to_pln=4.0):
+    
+    
     st.title("📘 Podsumowanie sesji")
 
     top_3 = st.session_state.get("top_3", [])
@@ -99,5 +101,6 @@ def pokaz_podsumowanie(api_key: str, model: str = "gpt-4o-mini", pricing=None, u
         f.write("✨ Podsumowanie AI:\n")
         f.write(podsumowanie + "\n")
         f.write(f"💰 Koszt sesji: {total_cost_usd:.4f} USD ({total_cost_pln:.2f} PLN)\n")
+        f.write(f"🔴 Model: {model}\n")
 
     st.success(f"✅ Podsumowanie zapisane jako `{filename}` w folderze `podsumowania/`.")

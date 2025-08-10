@@ -3,15 +3,18 @@ import streamlit as st
 from openai import OpenAI
 from dotenv import dotenv_values
 import os
+import random
 
 # import modułów
-from pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
-from redukcja import redukuj_wartosci
+from E01_intro import pokaz_intro
+from E02_pokaz_losowe_wartosci import pokaz_losowe_wartosci_animowane
+from E03_redukcja import redukuj_wartosci
+from E04_wybor_top_3 import wybor_top_3
+from E05_podsumowanie_coachingowe import podsumowanie_coachingowe
+from E06_podsumowanie import pokaz_podsumowanie
+
 from etap_postepu import pokaz_pasek_postepu
-from podsumowanie_coachingowe import podsumowanie_coachingowe
-from intro import pokaz_intro
-from podsumowanie import pokaz_podsumowanie
-from wybor_top_3 import wybor_top_3
+
 
 #raporty
 from panel_raportow import panel_raportow, usun_raporty
@@ -26,10 +29,10 @@ model_pricings = {
         "output_tokens": 0.600 / 1_000_000,
     }
 }
-MODEL = "gpt-4o-mini"
-USD_TO_PLN = 3.97
-PRICING = model_pricings[MODEL]
-LICZBA_WARTOSCI = 10
+# MODEL = "gpt-4o"
+
+
+
 
 env = dotenv_values(".env")
 
@@ -51,19 +54,6 @@ def autoryzacja_do_raportow():
                 st.session_state["raport_autoryzowany"] = False
 
 
-# # OpenAI API key
-# if not st.session_state.get("openai_api_key"):
-#     if "OPENAI_API_KEY" in env:
-#         st.session_state["openai_api_key"] = env["OPENAI_API_KEY"]
-#     else:
-#         st.info("Dodaj swój klucz API OpenAI aby móc korzystać z tej aplikacji")
-#         st.session_state["openai_api_key"] = st.text_input("Klucz API", type="password")
-#         if st.session_state["openai_api_key"]:
-#             st.rerun()
-
-# if not st.session_state.get("openai_api_key"):
-#     st.stop()
-
 
 if not st.session_state.get("openai_api_key"):
     if os.environ.get('APP_ENV') != 'production':
@@ -80,7 +70,10 @@ if not st.session_state.get("openai_api_key"):
 if not st.session_state.get("openai_api_key"):
     st.stop()
 
-
+if "Model" not in st.session_state:
+    opcje = ["gpt-4o-mini", "gpt-4o"]
+    st.session_state["Model"] = random.choice(opcje)
+    
 
 # Initiation
 if "etap" not in st.session_state:
@@ -95,6 +88,11 @@ if "kontynuuj_aktywny" not in st.session_state:
 if "coaching_index" not in st.session_state:
         st.session_state["coaching_index"] = 0
         st.session_state["coaching_chat"] = {}
+
+MODEL = st.session_state["Model"]
+USD_TO_PLN = 3.97
+PRICING = model_pricings[MODEL]
+LICZBA_WARTOSCI = 10
 
 st.title(":classical_building: Moje Osobiste Wartości")
 # pokaz_pasek_postepu()
@@ -116,10 +114,16 @@ elif st.session_state["etap"] == "redukcja_do_10":
     redukuj_wartosci(limit=10, nastepny_etap="wybor_top_3", komunikat="Usuń wartości, aż zostanie ich tylko 10.")
 
 elif st.session_state["etap"] == "wybor_top_3":
-    wybor_top_3(api_key=st.session_state["openai_api_key"])
+    wybor_top_3(
+        api_key=st.session_state["openai_api_key"], 
+        model=MODEL
+    )
 
 elif st.session_state["etap"] == "podsumowanie_coachingowe":
-    podsumowanie_coachingowe(api_key=st.session_state["openai_api_key"])
+    podsumowanie_coachingowe(
+        api_key=st.session_state["openai_api_key"],
+        model=MODEL
+    )
 
 elif st.session_state["etap"] == "podsumowanie":
     pokaz_podsumowanie(
@@ -136,6 +140,8 @@ if st.session_state.get("rerun"):
 # Sidebar
 with st.sidebar:
     st.header("🎯 Twoje wartości")
+    st.markdown(f""" Wybrany model (info na potrzeby testowania): {MODEL}""")
+    
     if "user_values" not in st.session_state:
         st.session_state["user_values"] = []
 
@@ -147,8 +153,8 @@ with st.sidebar:
     wartosci = st.session_state["user_values"]
     
     if (
-        st.session_state["etap"] == "Intro"
-        or st.session_state["etap"] == "wybor_wartosci"
+        # st.session_state["etap"] == "Intro"
+        st.session_state["etap"] == "wybor_wartosci"
         or st.session_state["etap"] == "redukcja_do_10"
     ):    
         st.markdown(
@@ -224,7 +230,7 @@ with st.sidebar:
                         padding: 6px 10px;
                         margin-bottom: 6px;
                         background-color: #f9f9f9;
-                        font-size: 1rem;
+                        font-size: 1rem;c
                         font-weight: 500;
                         text-align: center;
                     '>{val}</div>

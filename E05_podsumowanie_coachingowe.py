@@ -3,7 +3,7 @@ from openai import OpenAI
 from pathlib import Path
 from utils import wczytaj_szablony, wczytaj_osobowosc
 
-def podsumowanie_coachingowe(api_key: str):
+def podsumowanie_coachingowe(api_key: str, model: str):
     client = OpenAI(api_key=api_key)
     st.subheader("🧠 Zatrzymajmy się jeszcze na chwilę i podsumujmy to nasze spotkanie")
 
@@ -26,7 +26,7 @@ def podsumowanie_coachingowe(api_key: str):
         # thinking.info("⏳ Coach AI przygotowuje pytanie na start...")
         # with st.spinner("AI myśli..."):
         #     response = client.chat.completions.create(
-        #         model="gpt-4o",
+        #         model= model,
         #         messages=st.session_state["podsumowanie_chat"]
         #     )
         # thinking.empty()
@@ -39,7 +39,7 @@ def podsumowanie_coachingowe(api_key: str):
 
         # Zainicjuj sesję pytaniem od AI
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model= model,
             messages=st.session_state["podsumowanie_chat"]
         )
         first_message = response.choices[0].message.content.strip()
@@ -74,7 +74,7 @@ def podsumowanie_coachingowe(api_key: str):
         # thinking.info("⏳ Coach AI formułuje odpowiedź...")
         with st.spinner("Daj mi chwilę..."):
             response = client.chat.completions.create(
-                model="gpt-4o",
+                model= model,
                 messages=st.session_state["podsumowanie_chat"]
             )
         thinking.empty()
@@ -82,7 +82,7 @@ def podsumowanie_coachingowe(api_key: str):
 
         with st.chat_message("assistant"):
             response = client.chat.completions.create(
-                model="gpt-4o",
+                model= model,
                 messages=st.session_state["podsumowanie_chat"]
             )
             ai_msg = response.choices[0].message.content.strip()

@@ -35,7 +35,7 @@ def pokaz_losowe_wartosci_animowane(n=30, plik="lista_wartosci.txt"):
         Zauważ, że gdy wybierzesz pierwszą wartość, pojawi się po lewej stronie przycisk **Kontynuuj**,
         ponieważ wybór jednej wartości to takie niezbędne minimum, by iść dalej.
                     
-        Uwaga: kliknięcie na wybraną wartość powoduje jej usunięcie. 
+        Uwaga: kliknięcie na wybraną wartość w lewym okienku powoduje jej usunięcie. 
         To może być przydatne, jeśli chcesz zrezygnować z wybranej wartości.
                     
         """)
