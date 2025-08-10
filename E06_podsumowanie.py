@@ -40,9 +40,9 @@ def pokaz_podsumowanie(api_key: str, model: str, pricing=None, usd_to_pln=4.0):
         f"Oraz zapis sesji podsumowującej:\n{tresc_podsumowanie_chat}\n\n"
         f"Na podstawie tych rozmów wygeneruj:\n"
         f"- Krótkie przypomnienie 3 wartości,\n"
-        f"- Osobne podsumowanie rozmowy dla każdej wartości,\n"
-        f"- Syntetyczną listę możliwych działań („action items”) wypowiedzianych lub sugerowanych przez użytkownika,\n"
-        f"- Refleksje i przesłanie końcowe dla użytkownika.\n\n"
+        f"- skieruj do użytkownika Osobne podsumowanie rozmowy dla każdej wartości,\n"
+        f"- Skieruj do użytkownika syntetyczną listę możliwych działań wypowiedzianych lub sugerowanych przez użytkownika,\n"
+        f"- skieruj do użytkownika Refleksje i przesłanie końcowe dla użytkownika.\n\n"
         f"Zachowaj wspierający, ciepły i inspirujący ton."
     )
 
@@ -71,7 +71,7 @@ def pokaz_podsumowanie(api_key: str, model: str, pricing=None, usd_to_pln=4.0):
     })
 
     # Wyświetl
-    st.markdown("### ✨ Podsumowanie AI")
+    st.markdown("### ✨ Podsumowanie naszej sesji")
     st.markdown(podsumowanie)
 
     # Koszt sesji
