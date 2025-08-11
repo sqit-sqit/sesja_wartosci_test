@@ -20,13 +20,17 @@ from etap_postepu import pokaz_pasek_postepu
 from panel_raportow import panel_raportow, usun_raporty
 
 model_pricings = {
-    "gpt-4o": {
-        "input_tokens": 5.00 / 1_000_000,
-        "output_tokens": 15.00 / 1_000_000,
+    "gpt-5-nano": {
+        "input_tokens": 0.05 / 1_000_000,
+        "output_tokens": 0.40 / 1_000_000,
     },
-    "gpt-4o-mini": {
-        "input_tokens": 0.150 / 1_000_000,
-        "output_tokens": 0.600 / 1_000_000,
+    "gpt-5-mini": {
+        "input_tokens": 0.250 / 1_000_000,
+        "output_tokens": 2.00 / 1_000_000,
+    },
+    "gpt-5": {
+        "input_tokens": 1.25 / 1_000_000,
+        "output_tokens": 10.00 / 1_000_000,
     }
 }
 # MODEL = "gpt-4o"
@@ -71,7 +75,7 @@ if not st.session_state.get("openai_api_key"):
     st.stop()
 
 if "Model" not in st.session_state:
-    opcje = ["gpt-4o-mini", "gpt-4o"]
+    opcje = ["gpt-5-mini", "gpt-5", "gpt-5-nano"]
     st.session_state["Model"] = random.choice(opcje)
     
 
@@ -90,6 +94,7 @@ if "coaching_index" not in st.session_state:
         st.session_state["coaching_chat"] = {}
 
 MODEL = st.session_state["Model"]
+# MODEL = "gpt-5"
 USD_TO_PLN = 3.97
 PRICING = model_pricings[MODEL]
 LICZBA_WARTOSCI = 10

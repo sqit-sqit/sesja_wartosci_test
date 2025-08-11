@@ -5,6 +5,24 @@ def pokaz_intro():
     # st.title("👋 Witaj w aplikacji Odkrywania Wartości")
 
     st.markdown("""
+    
+    ### Droga Osobo testująca :)
+    Dziękuję za Twój czas poświęcony na przejście przez tę aplikację.
+    Efekty tego posłużą jej udoskonalaniu po to, by w niedalekiej przyszłości inni
+    mogli z niej czerpać wartość.
+    Jak z tym pracować? Wyobraź sobie, że bierzesz udział w sesji coachingowej.
+    Postaraj się na odpowiedzi jak najbardziej naturalne i szczere tak, 
+    jakby to była rozmowa z innym człowiekiem. Jeśli coś Cię zirytuje, napisz o tym.
+                
+    Sesje w pewnym fragmencie prowadzi AI. On(a) czasem potrzebuje czasu na odpowiedź.
+    Wykaż się proszę cierpliwością, jeśli nic przez dłuzszy momen nie będzie się działo
+    na ekranie. Niech Cię też nie razi skronmy interfejs. On z casem wypięknieje :)
+    
+    I podziel się w bezpośrednim kontakcie ze mną swoimi wrażeniami z tej sesji.
+    To bardzo dla mnie ważne, 
+                
+    pozdrawiam, Adam
+                
     ### 🔍 Moje Osobiste Wartości? O co tu chodzi?
     Jakie według mnie jest jedno z najważniejszych pytań, które sam sobie zadaję? 
     To pytanie to "Dlaczego?"

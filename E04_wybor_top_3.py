@@ -88,10 +88,10 @@ def wybor_top_3(api_key: str, model: str):
             response = client.chat.completions.create(
                 model=model,
                 messages=st.session_state["coaching_top_3"][wybrana],
-                temperature=0.9,
-                top_p=0.95,
-                presence_penalty=0.6,
-                frequency_penalty=0.2,
+                # temperature=0.9,
+                # top_p=0.95,
+                # presence_penalty=0.6,
+                # frequency_penalty=0.2,
             )
             first_msg = response.choices[0].message.content.strip()
             st.session_state["coaching_top_3"][wybrana].append(
